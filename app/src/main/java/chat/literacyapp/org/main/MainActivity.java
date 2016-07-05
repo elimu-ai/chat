@@ -10,13 +10,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import chat.literacyapp.org.R;
+import chat.literacyapp.org.main.MainFragment.Callback;
 import chat.literacyapp.org.session.ChatSessionActivity;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-public class MainActivity extends AppCompatActivity implements MainFragment.Callback {
+public class MainActivity extends AppCompatActivity implements Callback {
 
     //will use this later to make a two pane layout of list of devices, and chat for tablet
     private boolean mTwoPane;
