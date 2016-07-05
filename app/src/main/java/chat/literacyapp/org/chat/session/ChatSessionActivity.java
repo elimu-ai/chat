@@ -2,8 +2,10 @@ package chat.literacyapp.org.chat.session;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 
 import chat.literacyapp.org.chat.R;
+import chat.literacyapp.org.chat.main.MainFragment;
 
 public class ChatSessionActivity extends AppCompatActivity {
 
@@ -11,5 +13,13 @@ public class ChatSessionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_session);
+
+        // Set up the toolbar.
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        if (null == savedInstanceState) {
+           
+        }
     }
 }
