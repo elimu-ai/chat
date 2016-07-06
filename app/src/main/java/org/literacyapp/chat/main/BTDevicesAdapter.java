@@ -1,4 +1,4 @@
-package chat.literacyapp.org.main;
+package org.literacyapp.chat.main;
 
 import android.bluetooth.BluetoothDevice;
 import android.support.v7.widget.RecyclerView;
@@ -8,15 +8,16 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.literacyapp.chat.R;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import chat.literacyapp.org.R;
 
 /**
  * Created by oscarmakala on 05/07/2016.
  */
 public class BTDevicesAdapter extends RecyclerView.Adapter<BTDevicesAdapter.BTDevicesAdapterViewHolder> {
+
     private final View mEmptyView;
     private final BTDevicesAdapterOnClickHandler mClickHandler;
     List<BluetoothDevice> mItems = new ArrayList<>();
