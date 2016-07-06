@@ -1,4 +1,4 @@
-package chat.literacyapp.org.main;
+package org.literacyapp.chat.main;
 
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
@@ -9,9 +9,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
-import chat.literacyapp.org.R;
-import chat.literacyapp.org.main.MainFragment.Callback;
-import chat.literacyapp.org.session.ChatSessionActivity;
+import org.literacyapp.chat.R;
+import org.literacyapp.chat.main.MainFragment.Callback;
+import org.literacyapp.chat.session.ChatSessionActivity;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.

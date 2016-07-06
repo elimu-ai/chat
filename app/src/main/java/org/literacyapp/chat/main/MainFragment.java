@@ -1,4 +1,4 @@
-package chat.literacyapp.org.main;
+package org.literacyapp.chat.main;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -17,13 +17,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import chat.literacyapp.org.R;
-import chat.literacyapp.org.ui.widget.DividerItemDecoration;
+import org.literacyapp.chat.R;
+import org.literacyapp.chat.widget.DividerItemDecoration;
 
 /**
  * Created by oscarmakala on 05/07/2016.
  */
 public class MainFragment extends Fragment implements MainContract.View {
+
     private static final int REQUEST_ENABLE_BT = 5;
     private MainPresenter mActionsListener;
     private BTDevicesAdapter mBTDevicesAdapter;

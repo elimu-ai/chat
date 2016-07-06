@@ -1,10 +1,10 @@
-package chat.literacyapp.org.session;
+package org.literacyapp.chat.session;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
-import chat.literacyapp.org.R;
+import org.literacyapp.chat.R;
 
 public class ChatSessionActivity extends AppCompatActivity {
 
