@@ -1,4 +1,4 @@
-package chat.literacyapp.org.chat.ui.widget;
+package chat.literacyapp.org.ui.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;

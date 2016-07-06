@@ -1,4 +1,4 @@
-package chat.literacyapp.org.chat.main;
+package chat.literacyapp.org.main;
 
 import android.bluetooth.BluetoothDevice;
 import android.support.v7.widget.RecyclerView;
@@ -11,7 +11,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import chat.literacyapp.org.chat.R;
+import chat.literacyapp.org.R;
 
 /**
  * Created by oscarmakala on 05/07/2016.

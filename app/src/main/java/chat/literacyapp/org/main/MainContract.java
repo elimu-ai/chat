@@ -1,8 +1,6 @@
-package chat.literacyapp.org.chat.main;
+package chat.literacyapp.org.main;
 
 import android.bluetooth.BluetoothDevice;
-
-import java.util.List;
 
 /**
  * This specifies the contract between the view and the presenter
