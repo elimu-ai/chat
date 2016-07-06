@@ -1,4 +1,4 @@
-package chat.literacyapp.org.chat.main;
+package chat.literacyapp.org.main;
 
 import android.support.annotation.NonNull;
 
