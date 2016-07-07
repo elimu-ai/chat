@@ -1,4 +1,4 @@
-package chat.literacyapp.org.literacyapp;
+package org.literacyapp.chat;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
