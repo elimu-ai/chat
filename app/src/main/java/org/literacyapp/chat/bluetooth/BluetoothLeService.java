@@ -1,4 +1,4 @@
-package chat.literacyapp.org.chat.bluetooth;
+package org.literacyapp.chat.bluetooth;
 
 
 import android.app.Service;
@@ -42,11 +42,11 @@ public class BluetoothLeService extends Service {
     private static final int STATE_CONNECTING = 1;
     private static final int STATE_CONNECTED = 2;
 
-    public final static String ACTION_GATT_CONNECTED = "chat.literacyapp.org.chat.bluetooth.ACTION_GATT_CONNECTED";
-    public final static String ACTION_GATT_DISCONNECTED = "chat.literacyapp.org.chat.bluetooth.ACTION_GATT_DISCONNECTED";
-    public final static String ACTION_GATT_SERVICES_DISCOVERED = "chat.literacyapp.org.chat.bluetooth.ACTION_GATT_SERVICES_DISCOVERED";
-    public final static String ACTION_DATA_AVAILABLE = "chat.literacyapp.org.chat.bluetooth.ACTION_DATA_AVAILABLE";
-    public final static String EXTRA_DATA = "chat.literacyapp.org.chat.bluetooth.EXTRA_DATA";
+    public final static String ACTION_GATT_CONNECTED = "org.literacyapp.chat.bluetooth.ACTION_GATT_CONNECTED";
+    public final static String ACTION_GATT_DISCONNECTED = "org.literacyapp.chat.bluetooth.ACTION_GATT_DISCONNECTED";
+    public final static String ACTION_GATT_SERVICES_DISCOVERED = "org.literacyapp.chat.bluetooth.ACTION_GATT_SERVICES_DISCOVERED";
+    public final static String ACTION_DATA_AVAILABLE = "org.literacyapp.chat.bluetooth.ACTION_DATA_AVAILABLE";
+    public final static String EXTRA_DATA = "org.literacyapp.chat.bluetooth.EXTRA_DATA";
 
     //public final static UUID UUID_HEART_RATE_MEASUREMENT = UUID.fromString(SampleGattAttributes.HEART_RATE_MEASUREMENT);
 

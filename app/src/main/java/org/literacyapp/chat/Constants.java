@@ -1,4 +1,4 @@
-package chat.literacyapp.org.chat;
+package org.literacyapp.chat;
 
 /**
  * Created by oscarmakala on 08/07/2016.

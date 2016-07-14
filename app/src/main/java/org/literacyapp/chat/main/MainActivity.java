@@ -11,7 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import chat.literacyapp.org.chat.R;
-import chat.literacyapp.org.chat.bluetooth.ChatServerListFragment;
+import org.literacyapp.chat.bluetooth.ChatServerListFragment;
 import chat.literacyapp.org.chat.session.ChatSessionActivity;
 
 /**

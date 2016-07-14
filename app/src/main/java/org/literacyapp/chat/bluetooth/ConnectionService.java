@@ -1,14 +1,11 @@
-package chat.literacyapp.org.chat.bluetooth;
+package org.literacyapp.chat.bluetooth;
 
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
-import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
@@ -21,8 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-import chat.literacyapp.org.chat.btDiscovery.BluetoothDiscoveryActivity;
-import chat.literacyapp.org.chat.utils.BluetoothHelper;
+import org.literacyapp.chat.btDiscovery.BluetoothDiscoveryActivity;
+import org.literacyapp.chat.utils.BluetoothHelper;
 
 /**
  * Created by oscarmakala on 12/07/2016.

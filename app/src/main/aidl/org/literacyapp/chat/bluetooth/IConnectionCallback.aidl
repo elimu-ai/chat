@@ -1,5 +1,5 @@
 // IConnectionCallback.aidl
-package chat.literacyapp.org.chat.bluetooth;
+package org.literacyapp.chat.bluetooth;
 
 
 /**

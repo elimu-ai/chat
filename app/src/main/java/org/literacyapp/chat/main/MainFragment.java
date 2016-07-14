@@ -1,28 +1,21 @@
 package chat.literacyapp.org.chat.main;
 
-import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import chat.literacyapp.org.chat.R;
-import chat.literacyapp.org.chat.bluetooth.ChatServerListFragment;
-import chat.literacyapp.org.chat.bluetooth.Connection;
+import org.literacyapp.chat.bluetooth.ChatServerListFragment;
+import org.literacyapp.chat.bluetooth.Connection;
 import chat.literacyapp.org.chat.ui.widget.DividerItemDecoration;
 
-import static chat.literacyapp.org.chat.bluetooth.Connection.*;
+import static org.literacyapp.chat.bluetooth.Connection.*;
 
 /**
  * Created by oscarmakala on 05/07/2016.

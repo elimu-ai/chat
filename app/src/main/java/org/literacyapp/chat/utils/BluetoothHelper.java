@@ -1,4 +1,4 @@
-package chat.literacyapp.org.chat.utils;
+package org.literacyapp.chat.utils;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;

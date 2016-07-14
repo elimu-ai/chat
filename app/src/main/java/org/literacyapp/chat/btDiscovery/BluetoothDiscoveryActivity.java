@@ -1,4 +1,4 @@
-package chat.literacyapp.org.chat.btDiscovery;
+package org.literacyapp.chat.btDiscovery;
 
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import chat.literacyapp.org.chat.R;
 
 public class BluetoothDiscoveryActivity extends AppCompatActivity {
 

@@ -1,9 +1,9 @@
 // IConnection.aidl
-package chat.literacyapp.org.chat.bluetooth;
+package org.literacyapp.chat.bluetooth;
 
 // Declare any non-default types here with import statements
 
-import chat.literacyapp.org.chat.bluetooth.IConnectionCallback;
+import org.literacyapp.chat.bluetooth.IConnectionCallback;
 
 interface IConnection {
     /**
