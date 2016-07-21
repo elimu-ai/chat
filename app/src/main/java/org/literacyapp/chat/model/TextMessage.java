@@ -1,7 +1,17 @@
 package org.literacyapp.chat.model;
 
-/**
- * Created by jogrimst on 21/07/16.
- */
-public class TextMessage {
+import org.greenrobot.greendao.annotation.NotNull;
+
+public class TextMessage extends Message {
+
+    @NotNull
+    private String text;
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
 }
