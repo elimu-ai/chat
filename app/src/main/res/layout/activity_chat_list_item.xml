@@ -1,0 +1,29 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView android:id="@+id/imageViewAvatar"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginRight="?android:attr/listPreferredItemPaddingRight"
+        android:src="@drawable/ic_account_circle_black_24dp"
+        android:scaleType="fitCenter"
+        android:tint="@color/colorPrimaryDark" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#FFF">
+
+        <TextView android:id="@+id/textViewListItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#222"
+            android:gravity="center_vertical"
+            android:padding="@dimen/activity_vertical_margin"
+            android:minHeight="?android:attr/listPreferredItemHeightSmall"
+            android:text="Text message" />
+    </LinearLayout>
+</LinearLayout>
