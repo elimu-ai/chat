@@ -1,10 +1,13 @@
 package org.literacyapp.chat.model;
 
+import org.greenrobot.greendao.annotation.Convert;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.NotNull;
+import org.literacyapp.chat.dao.converter.CalendarConverter;
 
 import java.util.Calendar;
 
+@Deprecated
 public class Message {
 
     @Id(autoincrement = true)
@@ -14,6 +17,7 @@ public class Message {
     private String deviceId;
 
     @NotNull
+    @Convert(converter = CalendarConverter.class, columnType = Long.class)
     private Calendar timeSent;
 
     public Long getId() {

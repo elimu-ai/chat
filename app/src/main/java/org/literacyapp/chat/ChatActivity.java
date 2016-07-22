@@ -9,14 +9,16 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
+import org.literacyapp.chat.dao.TextMessageDao;
 import org.literacyapp.chat.model.TextMessage;
 import org.literacyapp.chat.util.DeviceInfoHelper;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 public class ChatActivity extends Activity {
+
+    private TextMessageDao textMessageDao;
 
     private List<TextMessage> textMessages;
 
@@ -35,7 +37,7 @@ public class ChatActivity extends Activity {
 
         setContentView(R.layout.activity_chat);
 
-        textMessages = new ArrayList<>();
+        textMessageDao = ((ChatApplication) getApplication()).getDaoSession().getTextMessageDao();
 
         mListPreviousMessages = (ListView) findViewById(R.id.listPreviousMessages);
         mTextMessage = (EditText) findViewById(R.id.textMessage);
@@ -47,9 +49,16 @@ public class ChatActivity extends Activity {
         Log.i(getClass().getName(), "onStart");
         super.onStart();
 
+        // Load messages sent within the last 24 hours
+        Calendar calendar24HoursAgo = Calendar.getInstance();
+        calendar24HoursAgo.add(Calendar.HOUR_OF_DAY, -24);
+        textMessages = textMessageDao.queryBuilder()
+                .where(TextMessageDao.Properties.TimeSent.gt(calendar24HoursAgo.getTimeInMillis()))
+                .list();
+        Log.i(getClass().getName(), "textMessages.size(): " + textMessages.size());
+
         arrayAdapter = new MessageListArrayAdapter(getApplicationContext(), textMessages);
         mListPreviousMessages.setAdapter(arrayAdapter);
-
 
         mButtonSend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,22 +74,34 @@ public class ChatActivity extends Activity {
                 textMessage.setText(text);
 
                 // Store in database
-                // TODO
+                textMessageDao.insert(textMessage);
 
+                // Add to UI
+                addToMessageListAndRefresh(textMessage);
+
+                // Reset input field
                 mTextMessage.setText("");
-
-                addToMessageList(textMessage);
             }
         });
-
-        // TODO: load previous messages
     }
 
-    private void addToMessageList(TextMessage textMessage) {
-        Log.i(getClass().getName(), "addToMessageList");
-
+    private void addToMessageListAndRefresh(TextMessage textMessage) {
         textMessages.add(textMessage);
+        refreshMessageList();
+    }
+
+    private void refreshMessageList() {
+        Log.i(getClass().getName(), "refreshMessageList");
+
         arrayAdapter.notifyDataSetChanged();
-        mListPreviousMessages.smoothScrollToPosition(textMessages.size());
+        mListPreviousMessages.smoothScrollToPosition(mListPreviousMessages.getCount());
+        // Fix problem with scrolling when keyboard is present
+        mListPreviousMessages.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Log.i(getClass().getName(), "mListPreviousMessages.postDelayed");
+                mListPreviousMessages.setSelection(mListPreviousMessages.getCount());
+            }
+        }, 100);
     }
 }

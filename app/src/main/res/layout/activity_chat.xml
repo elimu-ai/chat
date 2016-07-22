@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:divider="@null"
-            android:dividerHeight="@dimen/activity_vertical_margin"
+            android:dividerHeight="?android:attr/listPreferredItemPaddingStart"
             android:stackFromBottom="true" />
     </LinearLayout>
 
