@@ -69,7 +69,6 @@ public class ChatActivity extends Activity {
 
                 String text = mTextMessage.getText().toString();
                 Log.i(getClass().getName(), "text: " + text);
-                System.out.println(text);
 
                 // Check if the EditText is empty
                 if(!text.isEmpty()){
