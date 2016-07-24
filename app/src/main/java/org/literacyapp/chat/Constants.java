@@ -12,4 +12,5 @@ public class Constants {
     public static final int MESSAGE_TOAST = 5;
     public static final String DEVICE_NAME = "device_name";
     public static final String TOAST = "toast";
+    public static final int SERVER_PORT = 4999;
 }

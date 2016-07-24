@@ -5,9 +5,11 @@
     <uses-feature
         android:name="android.hardware.bluetooth_le"
         android:required="true" />
-
+    <uses-sdk android:minSdkVersion="14" />
+    <!-- remove this since no longer using bluetooth -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
 
     <application
         android:allowBackup="true"
@@ -28,9 +30,7 @@
         </activity>
         <activity android:name=".session.ChatSessionActivity" />
 
-        <service android:name=".bluetooth.ConnectionService" />
 
-        <activity android:name=".btDiscovery.BluetoothDiscoveryActivity"></activity>
     </application>
 
 </manifest>
