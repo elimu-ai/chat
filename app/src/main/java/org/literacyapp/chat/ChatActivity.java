@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.literacyapp.chat.dao.TextMessageDao;
 import org.literacyapp.chat.model.TextMessage;
@@ -42,6 +43,7 @@ public class ChatActivity extends Activity {
         mListPreviousMessages = (ListView) findViewById(R.id.listPreviousMessages);
         mTextMessage = (EditText) findViewById(R.id.textMessage);
         mButtonSend = (ImageButton) findViewById(R.id.buttonSend);
+
     }
 
     @Override
@@ -67,22 +69,39 @@ public class ChatActivity extends Activity {
 
                 String text = mTextMessage.getText().toString();
                 Log.i(getClass().getName(), "text: " + text);
+                System.out.println(text);
 
-                TextMessage textMessage = new TextMessage();
-                textMessage.setDeviceId(DeviceInfoHelper.getDeviceId(getApplicationContext()));
-                textMessage.setTimeSent(Calendar.getInstance());
-                textMessage.setText(text);
+                // Check if the EditText is empty
+                if(!text.isEmpty()){
+                    TextMessage textMessage = new TextMessage();
+                    textMessage.setDeviceId(DeviceInfoHelper.getDeviceId(getApplicationContext()));
+                    textMessage.setTimeSent(Calendar.getInstance());
+                    textMessage.setText(text);
 
-                // Store in database
-                textMessageDao.insert(textMessage);
+                    // Store in database
+                    textMessageDao.insert(textMessage);
 
-                // Add to UI
-                addToMessageListAndRefresh(textMessage);
+                    // Add to UI
+                    addToMessageListAndRefresh(textMessage);
 
-                // Reset input field
-                mTextMessage.setText("");
+                    // Reset input field
+                    mTextMessage.setText("");
+
+                } else {
+                    mButtonSend.setVisibility(View.GONE);
+                }
+                mButtonSend.setVisibility(View.VISIBLE);
+
             }
         });
+    }
+
+
+    public static boolean checkText(String text){
+
+        if(text.equals(""));
+
+        return false;
     }
 
     private void addToMessageListAndRefresh(TextMessage textMessage) {
