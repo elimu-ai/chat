@@ -2,6 +2,7 @@ package org.literacyapp.chat;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -71,7 +72,7 @@ public class ChatActivity extends Activity {
                 Log.i(getClass().getName(), "text: " + text);
 
                 // Check if the EditText is empty
-                if(!text.isEmpty()){
+                if(!TextUtils.isEmpty(text)){
                     TextMessage textMessage = new TextMessage();
                     textMessage.setDeviceId(DeviceInfoHelper.getDeviceId(getApplicationContext()));
                     textMessage.setTimeSent(Calendar.getInstance());
@@ -93,14 +94,6 @@ public class ChatActivity extends Activity {
 
             }
         });
-    }
-
-
-    public static boolean checkText(String text){
-
-        if(text.equals(""));
-
-        return false;
     }
 
     private void addToMessageListAndRefresh(TextMessage textMessage) {
