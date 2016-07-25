@@ -2,12 +2,14 @@ package org.literacyapp.chat;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.literacyapp.chat.dao.TextMessageDao;
 import org.literacyapp.chat.model.TextMessage;
@@ -42,6 +44,7 @@ public class ChatActivity extends Activity {
         mListPreviousMessages = (ListView) findViewById(R.id.listPreviousMessages);
         mTextMessage = (EditText) findViewById(R.id.textMessage);
         mButtonSend = (ImageButton) findViewById(R.id.buttonSend);
+
     }
 
     @Override
@@ -68,19 +71,27 @@ public class ChatActivity extends Activity {
                 String text = mTextMessage.getText().toString();
                 Log.i(getClass().getName(), "text: " + text);
 
-                TextMessage textMessage = new TextMessage();
-                textMessage.setDeviceId(DeviceInfoHelper.getDeviceId(getApplicationContext()));
-                textMessage.setTimeSent(Calendar.getInstance());
-                textMessage.setText(text);
+                // Check if the EditText is empty
+                if(!TextUtils.isEmpty(text)){
+                    TextMessage textMessage = new TextMessage();
+                    textMessage.setDeviceId(DeviceInfoHelper.getDeviceId(getApplicationContext()));
+                    textMessage.setTimeSent(Calendar.getInstance());
+                    textMessage.setText(text);
 
-                // Store in database
-                textMessageDao.insert(textMessage);
+                    // Store in database
+                    textMessageDao.insert(textMessage);
 
-                // Add to UI
-                addToMessageListAndRefresh(textMessage);
+                    // Add to UI
+                    addToMessageListAndRefresh(textMessage);
 
-                // Reset input field
-                mTextMessage.setText("");
+                    // Reset input field
+                    mTextMessage.setText("");
+
+                } else {
+                    mButtonSend.setVisibility(View.GONE);
+                }
+                mButtonSend.setVisibility(View.VISIBLE);
+
             }
         });
     }
