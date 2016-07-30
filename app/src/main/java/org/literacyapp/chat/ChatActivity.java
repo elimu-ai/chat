@@ -1,8 +1,11 @@
 package org.literacyapp.chat;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -63,6 +66,29 @@ public class ChatActivity extends Activity {
         arrayAdapter = new MessageListArrayAdapter(getApplicationContext(), textMessages);
         mListPreviousMessages.setAdapter(arrayAdapter);
 
+        mTextMessage.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+                if(editable.toString().trim().length() > 0){
+                    mButtonSend.setColorFilter(Color.GREEN);
+                } else {
+                    mButtonSend.setColorFilter(Color.BLACK);
+                }
+
+            }
+        });
+
         mButtonSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -71,7 +97,7 @@ public class ChatActivity extends Activity {
                 String text = mTextMessage.getText().toString();
                 Log.i(getClass().getName(), "text: " + text);
 
-                // Check if the EditText is empty
+                // Check if EditText is empty
                 if(!TextUtils.isEmpty(text)){
                     TextMessage textMessage = new TextMessage();
                     textMessage.setDeviceId(DeviceInfoHelper.getDeviceId(getApplicationContext()));
