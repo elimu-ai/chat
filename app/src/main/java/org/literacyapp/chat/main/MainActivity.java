@@ -51,7 +51,8 @@ public class MainActivity extends AppCompatActivity
     private Handler mUpdateHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            //String chatLine = msg.getData().getString("msg");
+            String chatLine = msg.getData().getString("msg");
+            NotificationCenter.getInstance().postNotificationName(NotificationCenter.LOGGER, TAG, chatLine);
             //addChatLine(chatLine);
         }
     };
@@ -71,14 +72,8 @@ public class MainActivity extends AppCompatActivity
 
         mWifiServiceSearcher = new WifiServiceSearcher(this);
         mWifiServiceSearcher.start();
-        try {
-            mGroupSocket = new GroupOwnerSocketConnection(mUpdateHandler, SERVICE_PORT_INSTANCE);
-            mGroupSocket.start();
-            Log.d(TAG, "Group socketserver started.");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
+        mChatConnection = new ChatConnection(mUpdateHandler, SERVICE_PORT_INSTANCE);
         if (null == savedInstanceState) {
             fragment = MainFragment.newInstance(connectionType);
             initFragment(fragment);
@@ -139,7 +134,7 @@ public class MainActivity extends AppCompatActivity
     public void onSendMessage(String message) {
         if (message != null) {
             if (!message.isEmpty()) {
-
+                mChatConnection.sendMessage(message);
             }
         }
     }
@@ -170,11 +165,12 @@ public class MainActivity extends AppCompatActivity
             WifiInfo wifiInfo = (WifiInfo) args[0];
             Log.d(TAG, "ip address: " + wifiInfo.getIpAddress());
             NotificationCenter.getInstance().postNotificationName(NotificationCenter.LOGGER, TAG, "IP:" + Formatter.formatIpAddress(wifiInfo.getIpAddress()));
-            if (mClientSocket == null && mWifiConnection != null) {
+            if (mWifiConnection != null) {//mClientSocket == null &&
                 String ipAddress = mWifiConnection.getIpAddress();
                 NotificationCenter.getInstance().postNotificationName(NotificationCenter.LOGGER, TAG, "Starting client socket connection to :" + ipAddress);
-                mClientSocket = new ClientSocketConnection(mUpdateHandler, ipAddress, CLIENT_PORT_INSTANCE);
-                mClientSocket.start();
+//                mClientSocket = new ClientSocketConnection(mUpdateHandler, ipAddress, CLIENT_PORT_INSTANCE);
+//                mClientSocket.start();
+                mChatConnection.connectToServer(ipAddress, CLIENT_PORT_INSTANCE);
             }
         } else if (id == NotificationCenter.WIFI_CONNECTIONSTATE) {
             int status = (int) args[0];

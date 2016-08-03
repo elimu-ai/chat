@@ -30,6 +30,7 @@ public class ClientSocketConnection extends Thread implements NotificationCenter
         try {
             socket.bind(null);
             socket.connect(new InetSocketAddress(mAddress, port), 5000);
+            NotificationCenter.getInstance().postNotificationName(NotificationCenter.LOGGER, TAG, "Launching the I/O handler");
             Log.d(TAG, "Launching the I/O handler");
             chat = new ConnectionManager(socket, handler, "Client");
             new Thread(chat).start();
