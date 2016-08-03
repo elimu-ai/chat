@@ -1,35 +1,46 @@
 package org.literacyapp.chat.main;
 
-import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 
-import org.literacy.wifip2p.WsdHelper;
+import org.literacy.wifip2p.NotificationCenter;
 import org.literacyapp.chat.R;
 
 /**
  * Created by oscarmakala on 05/07/2016.
  */
-public class MainFragment extends Fragment implements MainContract.View {
+public class MainFragment extends Fragment implements
+        MainContract.View,
+        NotificationCenter.NotificationCenterDelegate {
 
 
     private RecyclerView mChatList;
     private ChatAdapter chatAdapter;
     private EditText mChatMessage;
+    private TextView mTextView;
+
+    @Override
+    public void didReceivedNotification(int id, Object... args) {
+        if (NotificationCenter.LOGGER == id) {
+            String who = (String) args[0];
+            String line = (String) args[1];
+            mTextView.append(who + ":" + line + "\n");
+        }
+    }
 
 
     public interface ChatInputDelegate {
         public void onSendMessage(String message);
     }
+
 
     public static MainFragment newInstance(int connectionType) {
         Bundle bundle = new Bundle();
@@ -57,13 +68,14 @@ public class MainFragment extends Fragment implements MainContract.View {
     @Override
     public void onResume() {
         super.onResume();
-
+        NotificationCenter.getInstance().addObserver(this, NotificationCenter.LOGGER);
     }
 
 
     @Override
     public void onPause() {
         super.onPause();
+        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.LOGGER);
     }
 
 
@@ -71,13 +83,14 @@ public class MainFragment extends Fragment implements MainContract.View {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_main, container, false);
-        mChatList = (RecyclerView) root.findViewById(R.id.chatMessageView);
-        chatAdapter = new ChatAdapter();
-        mChatList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-        mChatList.setHasFixedSize(true);
-        mChatList.setAdapter(chatAdapter);
+        mTextView = (TextView) root.findViewById(R.id.infoText);
+//        mChatList = (RecyclerView) root.findViewById(R.id.chatMessageView);
+//        chatAdapter = new ChatAdapter();
+//        mChatList.setLayoutManager(new LinearLayoutManager(getActivity()));
+//        // use this setting to improve performance if you know that changes
+//        // in content do not change the layout size of the RecyclerView
+//        mChatList.setHasFixedSize(true);
+//        mChatList.setAdapter(chatAdapter);
 
         mChatMessage = (EditText) root.findViewById(R.id.chatInputView);
         root.findViewById(R.id.sendButton).setOnClickListener(new View.OnClickListener() {

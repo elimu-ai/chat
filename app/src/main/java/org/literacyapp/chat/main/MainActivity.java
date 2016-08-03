@@ -1,11 +1,6 @@
 package org.literacyapp.chat.main;
 
-import android.app.Dialog;
-import android.bluetooth.BluetoothDevice;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.wifi.p2p.WifiP2pInfo;
-import android.net.wifi.p2p.WifiP2pManager;
+import android.net.wifi.WifiInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -14,66 +9,75 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.format.Formatter;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.literacy.wifip2p.ChatConnection;
-import org.literacy.wifip2p.ChatHandler;
 import org.literacy.wifip2p.ClientSocketConnection;
-import org.literacy.wifip2p.ConnectionManager;
 import org.literacy.wifip2p.GroupOwnerSocketConnection;
-import org.literacy.wifip2p.WsdHelper;
-import org.literacy.wifip2p.model.WiFiP2pService;
-import org.literacyapp.chat.Constants;
+import org.literacy.wifip2p.NotificationCenter;
+import org.literacy.wifip2p.WifiAccessPoint;
+import org.literacy.wifip2p.WifiConnection;
+import org.literacy.wifip2p.WifiServiceSearcher;
 import org.literacyapp.chat.R;
-
-import java.io.IOException;
 
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-public class MainActivity extends AppCompatActivity implements MainFragment.ChatInputDelegate, WifiP2pManager.ConnectionInfoListener {
+public class MainActivity extends AppCompatActivity
+        implements
+        MainFragment.ChatInputDelegate, NotificationCenter.NotificationCenterDelegate {
 
     private static final String TAG = MainActivity.class.getSimpleName();
+
     //will use this later to make a two pane layout of list of devices, and chat for tablet
     private boolean mTwoPane;
     private int connectionType;
-    private WsdHelper mWsdHelper;
-    private final IntentFilter intentFilter = new IntentFilter();
+    private WifiAccessPoint mWifiAccessPoint;
 
-    public static final int MESSAGE_READ = 0x400 + 1;
-    public static final int MY_HANDLE = 0x400 + 2;
     private MainFragment fragment;
-    private Handler mUpdateHandler;
-    private ChatConnection mConnection;
+    private GroupOwnerSocketConnection mGroupSocket;
+
+    private String mInetAddress;
+    private WifiConnection mWifiConnection;
+    private WifiServiceSearcher mWifiServiceSearcher;
+    private ChatConnection mChatConnection;
+    private ClientSocketConnection mClientSocket;
+    private static final int SERVICE_PORT_INSTANCE = 4323;
+    private static final int CLIENT_PORT_INSTANCE = 4323;
+
+    private Handler mUpdateHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            //String chatLine = msg.getData().getString("msg");
+            //addChatLine(chatLine);
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_chat);
-
         // Set up the toolbar.
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        mUpdateHandler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                String chatLine = msg.getData().getString("msg");
-                //addChatLine(chatLine);
-            }
-        };
 
-        intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
-        intentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
-        intentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
-        intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
+        mWifiAccessPoint = new WifiAccessPoint(this);
+        mWifiAccessPoint.start();
 
-        mConnection = new ChatConnection(mUpdateHandler);
-        mWsdHelper = new WsdHelper(this);
-        mWsdHelper.initializeWsd();
+
+        mWifiServiceSearcher = new WifiServiceSearcher(this);
+        mWifiServiceSearcher.start();
+        try {
+            mGroupSocket = new GroupOwnerSocketConnection(mUpdateHandler, SERVICE_PORT_INSTANCE);
+            mGroupSocket.start();
+            Log.d(TAG, "Group socketserver started.");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         if (null == savedInstanceState) {
             fragment = MainFragment.newInstance(connectionType);
@@ -84,21 +88,43 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Chat
     @Override
     protected void onResume() {
         super.onResume();
-        if (mWsdHelper != null) {
-            mWsdHelper.registerService(mConnection.getLocalPort());
-            mWsdHelper.discoverServices(this, intentFilter);
+        if (mWifiAccessPoint != null) {
+            mWifiAccessPoint.start();
         }
+        NotificationCenter.getInstance().addObserver(this, NotificationCenter.WIFICON_SERVERADDRESS);
+        NotificationCenter.getInstance().addObserver(this, NotificationCenter.WIFI_CONNECTIONSTATE);
+        NotificationCenter.getInstance().addObserver(this, NotificationCenter.ACCESS_POINT_INSTANCE_INFO);
+
 
     }
 
     @Override
     protected void onPause() {
-        if (mWsdHelper != null) {
-            mWsdHelper.stopDiscovery();
+        if (mWifiAccessPoint != null) {
+            mWifiAccessPoint.stop();
         }
+        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.WIFICON_SERVERADDRESS);
+        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.WIFI_CONNECTIONSTATE);
+        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.ACCESS_POINT_INSTANCE_INFO);
         super.onPause();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mWifiConnection != null) {
+            mWifiConnection.stop();
+            mWifiConnection = null;
+        }
+        if (mWifiAccessPoint != null) {
+            mWifiAccessPoint.stop();
+            mWifiAccessPoint = null;
+        }
+        if (mWifiServiceSearcher != null) {
+            mWifiServiceSearcher.stop();
+            mWifiServiceSearcher = null;
+        }
+    }
 
     private void initFragment(Fragment fragment) {
         // Add the ChatesFragment to the layout
@@ -113,19 +139,87 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Chat
     public void onSendMessage(String message) {
         if (message != null) {
             if (!message.isEmpty()) {
-                mConnection.sendMessage(message);
+
             }
         }
     }
 
     @Override
-    public void onConnectionInfoAvailable(WifiP2pInfo p2pInfo) {
-        if (p2pInfo.isGroupOwner) {
-            Log.d(TAG, "Connected as group owner");
+    public void didReceivedNotification(int id, Object... args) {
+        if (id == NotificationCenter.ACCESS_POINT_INSTANCE_INFO) {
+            String instanceName = (String) args[0];
+            String[] instanceNameSplit = instanceName.split(":");
+            NotificationCenter.getInstance().postNotificationName(NotificationCenter.LOGGER, TAG, "found SSID:" + instanceNameSplit[1] + ", pwd:" + instanceNameSplit[2] + "IP:" + instanceNameSplit[3]);
+            if (mWifiConnection == null) {
+                if (mWifiAccessPoint != null) {
+                    mWifiAccessPoint.stop();
+                    mWifiAccessPoint = null;
+                }
+                if (mWifiServiceSearcher != null) {
+                    mWifiServiceSearcher.stop();
+                    mWifiServiceSearcher = null;
+                }
+
+                final String networkSSID = instanceNameSplit[1];
+                final String networkPassword = instanceNameSplit[2];
+                final String networkIPAddress = instanceNameSplit[3];
+                mWifiConnection = new WifiConnection(MainActivity.this, networkSSID, networkPassword, networkIPAddress);
+                NotificationCenter.getInstance().postNotificationName(NotificationCenter.LOGGER, TAG, "found access  point");
+            }
+        } else if (id == NotificationCenter.WIFICON_SERVERADDRESS) {
+            WifiInfo wifiInfo = (WifiInfo) args[0];
+            Log.d(TAG, "ip address: " + wifiInfo.getIpAddress());
+            NotificationCenter.getInstance().postNotificationName(NotificationCenter.LOGGER, TAG, "IP:" + Formatter.formatIpAddress(wifiInfo.getIpAddress()));
+            if (mClientSocket == null && mWifiConnection != null) {
+                String ipAddress = mWifiConnection.getIpAddress();
+                NotificationCenter.getInstance().postNotificationName(NotificationCenter.LOGGER, TAG, "Starting client socket connection to :" + ipAddress);
+                mClientSocket = new ClientSocketConnection(mUpdateHandler, ipAddress, CLIENT_PORT_INSTANCE);
+                mClientSocket.start();
+            }
+        } else if (id == NotificationCenter.WIFI_CONNECTIONSTATE) {
+            int status = (int) args[0];
+            String mConnectionStatus = "";
+            switch (status) {
+                case WifiConnection.ConectionStateNONE:
+                    mConnectionStatus = "NONE";
+                    break;
+                case WifiConnection.ConectionStatePreConnecting:
+                    mConnectionStatus = "PreConnecting";
+                    break;
+                case WifiConnection.ConectionStateConnecting:
+                    mConnectionStatus = "Connecting";
+                    break;
+                case WifiConnection.ConectionStateConnected:
+                    mConnectionStatus = "Connected";
+                    break;
+                case WifiConnection.ConectionStateDisconnected: {
+                    mConnectionStatus = "Disconnected";
+                    if (mWifiConnection != null) {
+                        mWifiConnection.stop();
+                        mWifiConnection = null;
+                        // should stop etc.
+                        mWifiConnection = null;
+                    }
+                    // make sure services are re-started
+                    if (mWifiAccessPoint != null) {
+                        mWifiAccessPoint.stop();
+                        mWifiAccessPoint = null;
+                    }
+                    mWifiAccessPoint = new WifiAccessPoint(this);
+                    mWifiAccessPoint.start();
+
+                    if (mWifiServiceSearcher != null) {
+                        mWifiServiceSearcher.stop();
+                        mWifiServiceSearcher = null;
+                    }
+
+                    mWifiServiceSearcher = new WifiServiceSearcher(this);
+                    mWifiServiceSearcher.start();
+                    break;
+                }
+            }
+            NotificationCenter.getInstance().postNotificationName(NotificationCenter.LOGGER, TAG, "Connection status:" + mConnectionStatus);
         }
-
-        mConnection.connectToServer(p2pInfo.groupOwnerAddress, 4545);
-
-
     }
+
 }

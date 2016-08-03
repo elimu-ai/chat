@@ -12,16 +12,15 @@ import java.net.Socket;
  * Created by oscarmakala on 23/07/2016.
  */
 public class ConnectionManager implements Runnable {
-    private final int myHandle;
-    private final int messageRead;
+
+    private final String side;
     private Socket socket = null;
     private Handler handler;
 
-    public ConnectionManager(Socket socket, Handler handler, int myHandle, int messageRead) {
+    public ConnectionManager(Socket socket, Handler handler, String who) {
         this.socket = socket;
         this.handler = handler;
-        this.myHandle = myHandle;
-        this.messageRead = messageRead;
+        this.side = who;
     }
 
     private InputStream iStream;
@@ -35,7 +34,7 @@ public class ConnectionManager implements Runnable {
             oStream = socket.getOutputStream();
             byte[] buffer = new byte[1024];
             int bytes;
-            handler.obtainMessage(myHandle, this).sendToTarget();
+            handler.obtainMessage(Constant.MY_HANDLE, this).sendToTarget();
             while (true) {
                 try {
                     // Read from the InputStream
@@ -45,7 +44,7 @@ public class ConnectionManager implements Runnable {
                     }
                     // Send the obtained bytes to the UI Activity
                     Log.d(TAG, "Rec:" + String.valueOf(buffer));
-                    handler.obtainMessage(messageRead, bytes, -1, buffer).sendToTarget();
+                    handler.obtainMessage(Constant.MESSAGE_READ, bytes, -1, buffer).sendToTarget();
                 } catch (IOException e) {
                     Log.e(TAG, "disconnected", e);
                 }

@@ -1,21 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/refresh_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingLeft="@dimen/activity_vertical_margin"
     android:paddingRight="@dimen/activity_vertical_margin">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/chatMessageView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+    <!--<android.support.v7.widget.RecyclerView-->
+    <!--android:id="@+id/chatMessageView"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content" />-->
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        android:scrollbars="vertical">
+
+        <TextView
+            android:id="@+id/infoText"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0" />
+
+    </ScrollView>
 
     <FrameLayout
         android:id="@+id/submit_order_button"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?actionBarSize"
         android:layout_gravity="bottom"
         android:clickable="true"
         android:focusable="true"

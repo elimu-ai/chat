@@ -32,8 +32,9 @@ public class ChatConnection {
     private Socket mSocket;
     private int mPort = -1;
 
-    public ChatConnection(Handler handler) {
+    public ChatConnection(Handler handler, int port) {
         mUpdateHandler = handler;
+        mPort = port;
         mChatServer = new ChatServer(handler);
     }
 
@@ -42,12 +43,8 @@ public class ChatConnection {
         mChatClient.tearDown();
     }
 
-    public void connectAsGroupOwner() {
-        mChatServer = new ChatServer(mUpdateHandler);
-    }
 
-
-    public void connectToServer(InetAddress address, int port) {
+    public void connectToServer(String address, int port) {
         mChatClient = new ChatClient(address, port);
     }
 
@@ -132,7 +129,7 @@ public class ChatConnection {
             public void run() {
 
                 try {
-                    mServerSocket = new ServerSocket(4545);
+                    mServerSocket = new ServerSocket(mPort);
                     setLocalPort(mServerSocket.getLocalPort());
                     while (!Thread.currentThread().isInterrupted()) {
                         Log.d(TAG, "ServerSocket Created, awaiting connection");
@@ -141,7 +138,7 @@ public class ChatConnection {
                         if (mChatClient == null) {
                             int port = mSocket.getPort();
                             InetAddress address = mSocket.getInetAddress();
-                            connectToServer(address, port);
+                            connectToServer(address.getHostAddress(), port);
                         }
                     }
                 } catch (IOException e) {
@@ -154,7 +151,7 @@ public class ChatConnection {
 
     private class ChatClient {
 
-        private InetAddress mAddress;
+        private String mAddress;
         private int PORT;
 
         private final String CLIENT_TAG = "ChatClient";
@@ -162,8 +159,7 @@ public class ChatConnection {
         private Thread mSendThread;
         private Thread mRecThread;
 
-        public ChatClient(InetAddress address, int port) {
-
+        public ChatClient(String address, int port) {
             Log.d(CLIENT_TAG, "Creating chatClient");
             this.mAddress = address;
             this.PORT = port;
