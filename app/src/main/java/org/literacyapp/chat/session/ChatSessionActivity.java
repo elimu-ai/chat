@@ -1,7 +1,7 @@
 package org.literacyapp.chat.session;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import org.literacyapp.chat.R;

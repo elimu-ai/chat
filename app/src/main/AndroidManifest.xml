@@ -2,8 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.literacyapp.chat">
 
+    <uses-sdk android:minSdkVersion="21" />
+    <!-- remove this since no longer using bluetooth -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
 
     <application
         android:allowBackup="true"
@@ -22,7 +25,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".session.ChatSessionActivity"></activity>
+        <activity android:name=".session.ChatSessionActivity" />
+
+
     </application>
 
 </manifest>

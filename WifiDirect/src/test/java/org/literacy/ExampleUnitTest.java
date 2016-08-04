@@ -1,4 +1,4 @@
-package org.literacyapp.chat;
+package org.literacy;
 
 import org.junit.Test;
 
