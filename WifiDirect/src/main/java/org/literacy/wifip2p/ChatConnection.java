@@ -92,7 +92,7 @@ public class ChatConnection {
                 try {
                     mSocket.close();
                 } catch (IOException e) {
-                    // TODO(alexlucas): Auto-generated catch block
+                    //: Auto-generated catch block
                     e.printStackTrace();
                 }
             }

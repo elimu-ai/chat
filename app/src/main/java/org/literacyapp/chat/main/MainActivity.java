@@ -13,8 +13,6 @@ import android.text.format.Formatter;
 import android.util.Log;
 
 import org.literacy.wifip2p.ChatConnection;
-import org.literacy.wifip2p.ClientSocketConnection;
-import org.literacy.wifip2p.GroupOwnerSocketConnection;
 import org.literacy.wifip2p.NotificationCenter;
 import org.literacy.wifip2p.WifiAccessPoint;
 import org.literacy.wifip2p.WifiConnection;
@@ -38,13 +36,12 @@ public class MainActivity extends AppCompatActivity
     private WifiAccessPoint mWifiAccessPoint;
 
     private MainFragment fragment;
-    private GroupOwnerSocketConnection mGroupSocket;
+
 
     private String mInetAddress;
     private WifiConnection mWifiConnection;
     private WifiServiceSearcher mWifiServiceSearcher;
     private ChatConnection mChatConnection;
-    private ClientSocketConnection mClientSocket;
     private static final int SERVICE_PORT_INSTANCE = 4323;
     private static final int CLIENT_PORT_INSTANCE = 4323;
 
