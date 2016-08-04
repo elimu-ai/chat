@@ -1,4 +1,4 @@
-package org.literacy.wifip2p;
+package org.literacyapp.wifip2p;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -92,9 +92,20 @@ public class WifiAccessPoint implements
         };
     }
 
+    public void start() {
+        mContext.registerReceiver(mReceiver, intentFilter);
+        mWsdManager.createGroup(mChannel, mActionListener);
+    }
 
     public void stop() {
-        mContext.unregisterReceiver(mReceiver);
+        if (mReceiver != null) {
+            try {
+                mContext.unregisterReceiver(mReceiver);
+                mReceiver = null;
+            } catch (Exception e) {
+                Log.e(TAG, "stoping receiver", e);
+            }
+        }
         stopLocalServices();
         removeGroup();
     }
@@ -194,11 +205,6 @@ public class WifiAccessPoint implements
 
             }
         });
-    }
-
-    public void start() {
-        mContext.registerReceiver(mReceiver, intentFilter);
-        mWsdManager.createGroup(mChannel, mActionListener);
     }
 
 

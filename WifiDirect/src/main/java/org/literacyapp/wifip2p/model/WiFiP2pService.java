@@ -1,4 +1,4 @@
-package org.literacy.wifip2p.model;
+package org.literacyapp.wifip2p.model;
 
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.support.annotation.NonNull;

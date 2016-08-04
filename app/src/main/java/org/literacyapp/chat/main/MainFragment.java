@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import org.literacy.wifip2p.NotificationCenter;
+import org.literacyapp.wifip2p.NotificationCenter;
 import org.literacyapp.chat.R;
 
 /**
@@ -30,9 +30,16 @@ public class MainFragment extends Fragment implements
     @Override
     public void didReceivedNotification(int id, Object... args) {
         if (NotificationCenter.LOGGER == id) {
-            String who = (String) args[0];
-            String line = (String) args[1];
-            mTextView.append(who + ":" + line + "\n");
+            final String who = (String) args[0];
+            final String line = (String) args[1];
+            //get errors from connection thread.must update on main u
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mTextView.append(who + ":" + line + "\n");
+                }
+            });
+
         }
     }
 

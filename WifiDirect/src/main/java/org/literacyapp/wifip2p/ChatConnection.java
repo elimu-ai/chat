@@ -1,4 +1,4 @@
-package org.literacy.wifip2p;
+package org.literacyapp.wifip2p;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -143,6 +143,8 @@ public class ChatConnection {
                     }
                 } catch (IOException e) {
                     Log.e(TAG, "Error creating ServerSocket: ", e);
+                    NotificationCenter.getInstance().postNotificationName(NotificationCenter.LOGGER, TAG, "Error creating ServerSocket:" + e.getMessage());
+
                     e.printStackTrace();
                 }
             }
@@ -182,9 +184,11 @@ public class ChatConnection {
                 try {
                     if (getSocket() == null) {
                         setSocket(new Socket(mAddress, PORT));
+                        NotificationCenter.getInstance().postNotificationName(NotificationCenter.LOGGER, TAG, "Client-side socket initialized.");
                         Log.d(CLIENT_TAG, "Client-side socket initialized.");
 
                     } else {
+                        NotificationCenter.getInstance().postNotificationName(NotificationCenter.LOGGER, TAG, "Socket already initialized. skipping!");
                         Log.d(CLIENT_TAG, "Socket already initialized. skipping!");
                     }
 
@@ -192,8 +196,10 @@ public class ChatConnection {
                     mRecThread.start();
 
                 } catch (UnknownHostException e) {
+                    NotificationCenter.getInstance().postNotificationName(NotificationCenter.LOGGER, TAG, "Initializing socket failed, UHE" + e.getMessage());
                     Log.d(CLIENT_TAG, "Initializing socket failed, UHE", e);
                 } catch (IOException e) {
+                    NotificationCenter.getInstance().postNotificationName(NotificationCenter.LOGGER, TAG, "Initializing socket failed, IOE" + e.getMessage());
                     Log.d(CLIENT_TAG, "Initializing socket failed, IOE.", e);
                 }
 

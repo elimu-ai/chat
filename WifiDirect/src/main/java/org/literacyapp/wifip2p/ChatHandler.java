@@ -1,4 +1,4 @@
-package org.literacy.wifip2p;
+package org.literacyapp.wifip2p;
 
 import android.net.wifi.p2p.WifiP2pDevice;
 

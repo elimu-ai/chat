@@ -12,11 +12,13 @@ import android.support.v7.widget.Toolbar;
 import android.text.format.Formatter;
 import android.util.Log;
 
-import org.literacy.wifip2p.ChatConnection;
-import org.literacy.wifip2p.NotificationCenter;
-import org.literacy.wifip2p.WifiAccessPoint;
-import org.literacy.wifip2p.WifiConnection;
-import org.literacy.wifip2p.WifiServiceSearcher;
+
+import org.literacyapp.wifip2p.ChatConnection;
+import org.literacyapp.wifip2p.NotificationCenter;
+import org.literacyapp.wifip2p.WifiAccessPoint;
+import org.literacyapp.wifip2p.WifiConnection;
+import org.literacyapp.wifip2p.WifiHelper;
+import org.literacyapp.wifip2p.WifiServiceSearcher;
 import org.literacyapp.chat.R;
 
 
@@ -26,7 +28,8 @@ import org.literacyapp.chat.R;
  */
 public class MainActivity extends AppCompatActivity
         implements
-        MainFragment.ChatInputDelegate, NotificationCenter.NotificationCenterDelegate {
+        MainFragment.ChatInputDelegate,
+        NotificationCenter.NotificationCenterDelegate {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -42,8 +45,8 @@ public class MainActivity extends AppCompatActivity
     private WifiConnection mWifiConnection;
     private WifiServiceSearcher mWifiServiceSearcher;
     private ChatConnection mChatConnection;
-    private static final int SERVICE_PORT_INSTANCE = 4323;
-    private static final int CLIENT_PORT_INSTANCE = 4323;
+    private static final int SERVICE_PORT_INSTANCE = 4324;
+    private static final int CLIENT_PORT_INSTANCE = 4324;
 
     private Handler mUpdateHandler = new Handler() {
         @Override
@@ -80,9 +83,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        if (mWifiAccessPoint != null) {
-            mWifiAccessPoint.start();
-        }
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.WIFICON_SERVERADDRESS);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.WIFI_CONNECTIONSTATE);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.ACCESS_POINT_INSTANCE_INFO);
@@ -92,9 +92,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onPause() {
-        if (mWifiAccessPoint != null) {
-            mWifiAccessPoint.stop();
-        }
         NotificationCenter.getInstance().removeObserver(this, NotificationCenter.WIFICON_SERVERADDRESS);
         NotificationCenter.getInstance().removeObserver(this, NotificationCenter.WIFI_CONNECTIONSTATE);
         NotificationCenter.getInstance().removeObserver(this, NotificationCenter.ACCESS_POINT_INSTANCE_INFO);
@@ -102,7 +99,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onDestroy() {
+    protected void onDestroy() {
         super.onDestroy();
         if (mWifiConnection != null) {
             mWifiConnection.stop();
@@ -117,6 +114,7 @@ public class MainActivity extends AppCompatActivity
             mWifiServiceSearcher = null;
         }
     }
+
 
     private void initFragment(Fragment fragment) {
         // Add the ChatesFragment to the layout

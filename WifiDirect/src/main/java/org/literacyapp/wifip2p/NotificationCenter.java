@@ -1,4 +1,4 @@
-package org.literacy.wifip2p;
+package org.literacyapp.wifip2p;
 
 import android.util.SparseArray;
 
