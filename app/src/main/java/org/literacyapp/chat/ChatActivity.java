@@ -12,7 +12,6 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import org.literacyapp.chat.dao.TextMessageDao;
 import org.literacyapp.chat.model.TextMessage;
@@ -81,9 +80,9 @@ public class ChatActivity extends Activity {
             public void afterTextChanged(Editable editable) {
 
                 if(editable.toString().trim().length() > 0){
-                    mButtonSend.setColorFilter(Color.GREEN);
+                    mButtonSend.setColorFilter(Color.rgb(0,150,136));
                 } else {
-                    mButtonSend.setColorFilter(Color.BLACK);
+                    mButtonSend.setColorFilter(Color.rgb(0,0,0));
                 }
 
             }
