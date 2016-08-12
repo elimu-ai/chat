@@ -1,15 +1,17 @@
 package org.literacyapp.chat;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import org.literacyapp.chat.dao.TextMessageDao;
 import org.literacyapp.chat.model.TextMessage;
@@ -63,6 +65,29 @@ public class ChatActivity extends Activity {
         arrayAdapter = new MessageListArrayAdapter(getApplicationContext(), textMessages);
         mListPreviousMessages.setAdapter(arrayAdapter);
 
+        mTextMessage.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+                if(!TextUtils.isEmpty(editable)){
+                    mButtonSend.setColorFilter(Color.rgb(0,150,136));
+                } else {
+                    mButtonSend.setColorFilter(Color.rgb(158,158,158));
+                }
+
+            }
+        });
+
         mButtonSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -71,7 +96,7 @@ public class ChatActivity extends Activity {
                 String text = mTextMessage.getText().toString();
                 Log.i(getClass().getName(), "text: " + text);
 
-                // Check if the EditText is empty
+                // Check if EditText is empty
                 if(!TextUtils.isEmpty(text)){
                     TextMessage textMessage = new TextMessage();
                     textMessage.setDeviceId(DeviceInfoHelper.getDeviceId(getApplicationContext()));
