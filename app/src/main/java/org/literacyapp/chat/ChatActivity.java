@@ -79,10 +79,10 @@ public class ChatActivity extends Activity {
             @Override
             public void afterTextChanged(Editable editable) {
 
-                if(editable.toString().trim().length() > 0){
+                if(!TextUtils.isEmpty(editable)){
                     mButtonSend.setColorFilter(Color.rgb(0,150,136));
                 } else {
-                    mButtonSend.setColorFilter(Color.rgb(0,0,0));
+                    mButtonSend.setColorFilter(Color.rgb(158,158,158));
                 }
 
             }
