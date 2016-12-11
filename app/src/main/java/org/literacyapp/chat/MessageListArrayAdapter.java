@@ -9,27 +9,27 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.literacyapp.chat.model.TextMessage;
+import org.literacyapp.chat.model.Message;
 
 import java.util.List;
 
-public class MessageListArrayAdapter extends ArrayAdapter<TextMessage> {
+public class MessageListArrayAdapter extends ArrayAdapter<Message> {
 
     private Context context;
 
-    private List<TextMessage> textMessages;
+    private List<Message> messages;
 
     static class ViewHolder {
         ImageView imageViewAvatar;
         TextView textViewListItem;
     }
 
-    public MessageListArrayAdapter(Context context, List<TextMessage> textMessages) {
-        super(context, R.layout.activity_chat_list_item, textMessages);
+    public MessageListArrayAdapter(Context context, List<Message> messages) {
+        super(context, R.layout.activity_chat_list_item, messages);
         Log.i(getClass().getName(), "MessageListArrayAdapter");
 
         this.context = context;
-        this.textMessages = textMessages;
+        this.messages = messages;
     }
 
     @Override
@@ -46,10 +46,10 @@ public class MessageListArrayAdapter extends ArrayAdapter<TextMessage> {
             listItem.setTag(viewHolder);
         }
 
-        TextMessage textMessage = textMessages.get(position);
+        Message message = messages.get(position);
 
         ViewHolder viewHolder = (ViewHolder) listItem.getTag();
-        viewHolder.textViewListItem.setText(textMessage.getText());
+        viewHolder.textViewListItem.setText(message.getText());
 
         return listItem;
     }

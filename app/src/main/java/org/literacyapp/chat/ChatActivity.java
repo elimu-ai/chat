@@ -13,8 +13,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
-import org.literacyapp.chat.dao.TextMessageDao;
-import org.literacyapp.chat.model.TextMessage;
+import org.literacyapp.chat.dao.MessageDao;
+import org.literacyapp.chat.model.Message;
 import org.literacyapp.chat.util.DeviceInfoHelper;
 
 import java.util.Calendar;
@@ -22,15 +22,15 @@ import java.util.List;
 
 public class ChatActivity extends Activity {
 
-    private TextMessageDao textMessageDao;
+    private MessageDao messageDao;
 
-    private List<TextMessage> textMessages;
+    private List<Message> messages;
 
     private ArrayAdapter arrayAdapter;
 
     private ListView mListPreviousMessages;
 
-    private EditText mTextMessage;
+    private EditText message;
 
     private ImageButton mButtonSend;
 
@@ -41,10 +41,10 @@ public class ChatActivity extends Activity {
 
         setContentView(R.layout.activity_chat);
 
-        textMessageDao = ((ChatApplication) getApplication()).getDaoSession().getTextMessageDao();
+        messageDao = ((ChatApplication) getApplication()).getDaoSession().getMessageDao();
 
         mListPreviousMessages = (ListView) findViewById(R.id.listPreviousMessages);
-        mTextMessage = (EditText) findViewById(R.id.textMessage);
+        message = (EditText) findViewById(R.id.message);
         mButtonSend = (ImageButton) findViewById(R.id.buttonSend);
 
     }
@@ -57,15 +57,15 @@ public class ChatActivity extends Activity {
         // Load messages sent within the last 24 hours
         Calendar calendar24HoursAgo = Calendar.getInstance();
         calendar24HoursAgo.add(Calendar.HOUR_OF_DAY, -24);
-        textMessages = textMessageDao.queryBuilder()
-                .where(TextMessageDao.Properties.TimeSent.gt(calendar24HoursAgo.getTimeInMillis()))
+        messages = messageDao.queryBuilder()
+                .where(MessageDao.Properties.TimeSent.gt(calendar24HoursAgo.getTimeInMillis()))
                 .list();
-        Log.i(getClass().getName(), "textMessages.size(): " + textMessages.size());
+        Log.i(getClass().getName(), "messages.size(): " + messages.size());
 
-        arrayAdapter = new MessageListArrayAdapter(getApplicationContext(), textMessages);
+        arrayAdapter = new MessageListArrayAdapter(getApplicationContext(), messages);
         mListPreviousMessages.setAdapter(arrayAdapter);
 
-        mTextMessage.addTextChangedListener(new TextWatcher() {
+        message.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -93,24 +93,24 @@ public class ChatActivity extends Activity {
             public void onClick(View view) {
                 Log.i(getClass().getName(), "mButtonSend onClick");
 
-                String text = mTextMessage.getText().toString();
+                String text = message.getText().toString();
                 Log.i(getClass().getName(), "text: " + text);
 
                 // Check if EditText is empty
                 if(!TextUtils.isEmpty(text)){
-                    TextMessage textMessage = new TextMessage();
-                    textMessage.setDeviceId(DeviceInfoHelper.getDeviceId(getApplicationContext()));
-                    textMessage.setTimeSent(Calendar.getInstance());
-                    textMessage.setText(text);
+                    Message message = new Message();
+                    message.setDeviceId(DeviceInfoHelper.getDeviceId(getApplicationContext()));
+                    message.setTimeSent(Calendar.getInstance());
+                    message.setText(text);
 
                     // Store in database
-                    textMessageDao.insert(textMessage);
+                    messageDao.insert(message);
 
                     // Add to UI
-                    addToMessageListAndRefresh(textMessage);
+                    addToMessageListAndRefresh(message);
 
                     // Reset input field
-                    mTextMessage.setText("");
+                    ChatActivity.this.message.setText("");
 
                 } else {
                     mButtonSend.setVisibility(View.GONE);
@@ -121,8 +121,8 @@ public class ChatActivity extends Activity {
         });
     }
 
-    private void addToMessageListAndRefresh(TextMessage textMessage) {
-        textMessages.add(textMessage);
+    private void addToMessageListAndRefresh(Message message) {
+        messages.add(message);
         refreshMessageList();
     }
 
