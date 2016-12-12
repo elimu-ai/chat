@@ -26,6 +26,8 @@ public class MessageListArrayAdapter extends ArrayAdapter<Message> {
 
     private List<Message> messages;
 
+    private String studentId; // Id of current Student using the Device
+
     static class ViewHolder {
         ImageView imageViewAvatar;
         TextView textViewListItem;
@@ -37,31 +39,37 @@ public class MessageListArrayAdapter extends ArrayAdapter<Message> {
 
         this.context = context;
         this.messages = messages;
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        studentId = sharedPreferences.getString(StudentUpdateReceiver.PREF_STUDENT_ID, null);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Log.i(getClass().getName(), "getView");
 
-        View listItem = convertView;
-        if (listItem == null) {
-            LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            listItem = layoutInflater.inflate(R.layout.activity_chat_list_item, parent, false);
-            ViewHolder viewHolder = new ViewHolder();
-            viewHolder.imageViewAvatar = (ImageView) listItem.findViewById(R.id.imageViewAvatar);
-            viewHolder.textViewListItem = (TextView) listItem.findViewById(R.id.textViewListItem);
-            listItem.setTag(viewHolder);
-        }
-
         Message message = messages.get(position);
 
-        ViewHolder viewHolder = (ViewHolder) listItem.getTag();
+        View listItem = null;
+
+        LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        if (TextUtils.isEmpty(message.getStudentId()) || message.getStudentId().equals(studentId)) {
+            // Align message to the left of the screen
+            listItem = layoutInflater.inflate(R.layout.activity_chat_list_item, parent, false);
+        } else {
+            // Align message to the right of the screen
+            listItem = layoutInflater.inflate(R.layout.activity_chat_list_item_right, parent, false);
+        }
+
+
+        ViewHolder viewHolder = new ViewHolder();
+        viewHolder.imageViewAvatar = (ImageView) listItem.findViewById(R.id.imageViewAvatar);
+        viewHolder.textViewListItem = (TextView) listItem.findViewById(R.id.textViewListItem);
+
         viewHolder.textViewListItem.setText(message.getText());
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String studentAvatar = sharedPreferences.getString(StudentUpdateReceiver.PREF_STUDENT_AVATAR, null);
-        if (!TextUtils.isEmpty(studentAvatar)) {
-            File file = new File(studentAvatar);
+        if (!TextUtils.isEmpty(message.getStudentAvatar())) {
+            File file = new File(message.getStudentAvatar());
             if (file.exists()) {
                 Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
                 viewHolder.imageViewAvatar.setImageBitmap(bitmap);

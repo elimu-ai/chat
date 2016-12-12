@@ -1,8 +1,14 @@
 package org.literacyapp.chat;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -15,12 +21,15 @@ import android.widget.ListView;
 
 import org.literacyapp.chat.dao.MessageDao;
 import org.literacyapp.chat.model.Message;
+import org.literacyapp.chat.receiver.StudentUpdateReceiver;
 import org.literacyapp.chat.util.DeviceInfoHelper;
 
 import java.util.Calendar;
 import java.util.List;
 
 public class ChatActivity extends Activity {
+
+    public static final int PERMISSION_REQUEST_READ_EXTERNAL_STORAGE = 0;
 
     private MessageDao messageDao;
 
@@ -46,13 +55,19 @@ public class ChatActivity extends Activity {
         mListPreviousMessages = (ListView) findViewById(R.id.listPreviousMessages);
         message = (EditText) findViewById(R.id.message);
         mButtonSend = (ImageButton) findViewById(R.id.buttonSend);
-
     }
 
     @Override
     protected void onStart() {
         Log.i(getClass().getName(), "onStart");
         super.onStart();
+
+        // Ask for permissions
+        int permissionCheckWriteExternalStorage = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+        if (permissionCheckWriteExternalStorage != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_READ_EXTERNAL_STORAGE);
+            return;
+        }
 
         // Load messages sent within the last 24 hours
         Calendar calendar24HoursAgo = Calendar.getInstance();
@@ -100,6 +115,17 @@ public class ChatActivity extends Activity {
                 if(!TextUtils.isEmpty(text)){
                     Message message = new Message();
                     message.setDeviceId(DeviceInfoHelper.getDeviceId(getApplicationContext()));
+
+                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    String studentId = sharedPreferences.getString(StudentUpdateReceiver.PREF_STUDENT_ID, null);
+                    if (!TextUtils.isEmpty(studentId)) {
+                        message.setStudentId(studentId);
+                    }
+                    String studentAvatar = sharedPreferences.getString(StudentUpdateReceiver.PREF_STUDENT_AVATAR, null);
+                    if (!TextUtils.isEmpty(studentAvatar)) {
+                        message.setStudentAvatar(studentAvatar);
+                    }
+
                     message.setTimeSent(Calendar.getInstance());
                     message.setText(text);
 
