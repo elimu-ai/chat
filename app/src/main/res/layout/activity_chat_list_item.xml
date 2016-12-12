@@ -7,10 +7,17 @@
         android:id="@+id/imageViewAvatar"
         android:layout_width="96dp"
         android:layout_height="96dp"
-        android:layout_marginRight="?android:attr/listPreferredItemPaddingRight"
+        android:layout_marginRight="0dp"
         android:src="@drawable/ic_account_circle_black_24dp"
         app:civ_border_width="1dp"
         app:civ_border_color="#CCFFFFFF" />
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginRight="-25dp"
+        android:rotation="180"
+        android:src="@drawable/shape_triangle" />
 
     <LinearLayout
         android:layout_width="wrap_content"

@@ -25,12 +25,18 @@
             android:text="Text message" />
     </LinearLayout>
 
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="-25dp"
+        android:rotation="180"
+        android:src="@drawable/shape_triangle" />
+
     <de.hdodenhof.circleimageview.CircleImageView
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/imageViewAvatar"
         android:layout_width="96dp"
         android:layout_height="96dp"
-        android:layout_marginLeft="?android:attr/listPreferredItemPaddingRight"
         android:src="@drawable/ic_account_circle_black_24dp"
         app:civ_border_width="1dp"
         app:civ_border_color="#CCFFFFFF" />
