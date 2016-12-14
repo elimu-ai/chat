@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
@@ -39,7 +38,7 @@ public class ChatActivity extends Activity {
 
     private ListView mListPreviousMessages;
 
-    private EditText message;
+    private EditText messageText;
 
     private ImageButton mButtonSend;
 
@@ -53,7 +52,7 @@ public class ChatActivity extends Activity {
         messageDao = ((ChatApplication) getApplication()).getDaoSession().getMessageDao();
 
         mListPreviousMessages = (ListView) findViewById(R.id.listPreviousMessages);
-        message = (EditText) findViewById(R.id.message);
+        messageText = (EditText) findViewById(R.id.message);
         mButtonSend = (ImageButton) findViewById(R.id.buttonSend);
     }
 
@@ -80,7 +79,7 @@ public class ChatActivity extends Activity {
         arrayAdapter = new MessageListArrayAdapter(getApplicationContext(), messages);
         mListPreviousMessages.setAdapter(arrayAdapter);
 
-        message.addTextChangedListener(new TextWatcher() {
+        messageText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -93,61 +92,80 @@ public class ChatActivity extends Activity {
 
             @Override
             public void afterTextChanged(Editable editable) {
+                Log.i(getClass().getName(), "afterTextChanged");
 
-                if(!TextUtils.isEmpty(editable)){
-                    mButtonSend.setColorFilter(Color.rgb(0,150,136));
+                Log.i(getClass().getName(), "editable: " + editable);
+
+                if (!TextUtils.isEmpty(editable)) {
+                    if (!mButtonSend.isEnabled()) {
+                        mButtonSend.setEnabled(true);
+                        mButtonSend.setImageDrawable(getDrawable(R.drawable.ic_send_white_24dp));
+
+//                        // Animate button to indicate that it can be pressed
+//                        final long duration = 300;
+//
+//                        final ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(mButtonSend, View.SCALE_X, 1f, 1.2f, 1f);
+//                        scaleXAnimator.setDuration(duration);
+//                        scaleXAnimator.setRepeatCount(1);
+//
+//                        final ObjectAnimator scaleYAnimator = ObjectAnimator.ofFloat(mButtonSend, View.SCALE_Y, 1f, 1.2f, 1f);
+//                        scaleYAnimator.setDuration(duration);
+//                        scaleYAnimator.setRepeatCount(1);
+//
+//                        scaleXAnimator.start();
+//                        scaleYAnimator.start();
+//
+//                        final AnimatorSet animatorSet = new AnimatorSet();
+//                        animatorSet.play(scaleXAnimator).with(scaleYAnimator);
+//                        animatorSet.start();
+                    }
                 } else {
-                    mButtonSend.setColorFilter(Color.rgb(158,158,158));
+                    mButtonSend.setEnabled(false);
+                    mButtonSend.setImageDrawable(getDrawable(R.drawable.ic_send_grey_24dp));
                 }
-
             }
         });
+
+        // Default to grey button
+        mButtonSend.setEnabled(false);
+        mButtonSend.setImageDrawable(getDrawable(R.drawable.ic_send_grey_24dp));
 
         mButtonSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.i(getClass().getName(), "mButtonSend onClick");
 
-                String text = message.getText().toString();
+                String text = messageText.getText().toString();
                 Log.i(getClass().getName(), "text: " + text);
 
-                // Check if EditText is empty
-                if(!TextUtils.isEmpty(text)){
-                    Message message = new Message();
-                    message.setDeviceId(DeviceInfoHelper.getDeviceId(getApplicationContext()));
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                    String studentId = sharedPreferences.getString(StudentUpdateReceiver.PREF_STUDENT_ID, null);
-                    if (!TextUtils.isEmpty(studentId)) {
-                        message.setStudentId(studentId);
-                    }
-                    String studentAvatar = sharedPreferences.getString(StudentUpdateReceiver.PREF_STUDENT_AVATAR, null);
-                    if (!TextUtils.isEmpty(studentAvatar)) {
-                        message.setStudentAvatar(studentAvatar);
-                    }
-
-                    message.setTimeSent(Calendar.getInstance());
-                    message.setText(text);
-
-                    // Store in database
-                    messageDao.insert(message);
-
-                    // Add to UI
-                    addToMessageListAndRefresh(message);
-
-                    // Reset input field
-                    ChatActivity.this.message.setText("");
-
-                } else {
-                    mButtonSend.setVisibility(View.GONE);
+                // Store in database
+                Message message = new Message();
+                message.setDeviceId(DeviceInfoHelper.getDeviceId(getApplicationContext()));
+                String studentId = sharedPreferences.getString(StudentUpdateReceiver.PREF_STUDENT_ID, null);
+                if (!TextUtils.isEmpty(studentId)) {
+                    message.setStudentId(studentId);
                 }
-                mButtonSend.setVisibility(View.VISIBLE);
+                String studentAvatar = sharedPreferences.getString(StudentUpdateReceiver.PREF_STUDENT_AVATAR, null);
+                if (!TextUtils.isEmpty(studentAvatar)) {
+                    message.setStudentAvatar(studentAvatar);
+                }
+                message.setTimeSent(Calendar.getInstance());
+                message.setText(text);
+                messageDao.insert(message);
 
+                // Add to UI
+                addToMessageListAndRefresh(message);
+
+                // Reset input field
+                messageText.setText("");
             }
         });
     }
 
     private void addToMessageListAndRefresh(Message message) {
+        Log.i(getClass().getName(), "addToMessageListAndRefresh");
         messages.add(message);
         refreshMessageList();
     }
