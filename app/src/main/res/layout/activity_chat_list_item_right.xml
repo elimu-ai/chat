@@ -37,7 +37,7 @@
         android:id="@+id/imageViewAvatar"
         android:layout_width="96dp"
         android:layout_height="96dp"
-        android:src="@drawable/ic_account_circle_black_24dp"
+        android:src="@drawable/akili"
         app:civ_border_width="1dp"
         app:civ_border_color="#CCFFFFFF" />
 </LinearLayout>
