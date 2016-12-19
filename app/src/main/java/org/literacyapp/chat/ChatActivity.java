@@ -160,6 +160,21 @@ public class ChatActivity extends Activity {
 
                 // Reset input field
                 messageText.setText("");
+
+                mButtonSend.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Simulate message from AI tutor
+
+                        Message message = new Message();
+                        message.setStudentId("00000000aaaaaaaa_1");
+                        message.setTimeSent(Calendar.getInstance());
+                        message.setText(getRandomEmoji());
+
+                        // Add to UI
+                        addToMessageListAndRefresh(message);
+                    }
+                }, (int) (Math.random() * 5000));
             }
         });
     }
@@ -183,5 +198,83 @@ public class ChatActivity extends Activity {
                 mListPreviousMessages.setSelection(mListPreviousMessages.getCount());
             }
         }, 100);
+    }
+
+    private String getRandomEmoji() {
+        int[] unicodes = new int[] {
+                0x1F601,
+                0x1F602,
+                0x1F603,
+                0x1F604,
+                0x1F605,
+                0x1F606,
+                0x1F609,
+                0x1F60A,
+                0x1F60B,
+                0x1F60C,
+                0x1F60D,
+                0x1F60F,
+                0x1F612,
+                0x1F613,
+                0x1F614,
+                0x1F616,
+                0x1F618,
+                0x1F61A,
+                0x1F61C,
+                0x1F61D,
+                0x1F61E,
+                0x1F620,
+                0x1F621,
+                0x1F622,
+                0x1F623,
+                0x1F624,
+                0x1F625,
+                0x1F628,
+                0x1F629,
+                0x1F62A,
+                0x1F62B,
+                0x1F62D,
+                0x1F630,
+                0x1F631,
+                0x1F632,
+                0x1F633,
+                0x1F635,
+                0x1F637,
+                0x1F638,
+                0x1F639,
+                0x1F63A,
+                0x1F63B,
+                0x1F63C,
+                0x1F63D,
+                0x1F63E,
+                0x1F63F,
+                0x1F640,
+                0x1F645,
+                0x1F646,
+                0x1F647,
+                0x1F648,
+                0x1F649,
+                0x1F64A,
+                0x1F64B,
+                0x1F64C,
+                0x1F64D,
+                0x1F64E,
+                0x1F64F,
+        };
+        int randomIndex = (int) (Math.random() * unicodes.length);
+        int unicode = unicodes[randomIndex];
+        Log.d(getClass().getName(), "unicode: " + unicode);
+        String emoji = getEmijoByUnicode(unicode);
+        Log.i(getClass().getName(), "emoji: " + emoji);
+        return emoji;
+    }
+
+    /**
+     * See http://apps.timwhitlock.info/emoji/tables/unicode
+     * @param unicode Example: "U+1F601" --> "0x1F601"
+     * @return
+     */
+    private String getEmijoByUnicode(int unicode) {
+        return new String(Character.toChars(unicode));
     }
 }
