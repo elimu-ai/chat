@@ -74,6 +74,9 @@ public class MessageListArrayAdapter extends ArrayAdapter<Message> {
                 Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
                 viewHolder.imageViewAvatar.setImageBitmap(bitmap);
             }
+        } else if ("00000000aaaaaaaa_2".equals(message.getStudentId())) {
+            // Penguin
+            viewHolder.imageViewAvatar.setImageDrawable(context.getDrawable(R.drawable.penguin));
         }
 
         return listItem;
