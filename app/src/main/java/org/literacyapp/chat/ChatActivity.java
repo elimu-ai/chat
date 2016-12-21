@@ -161,20 +161,37 @@ public class ChatActivity extends Activity {
                 // Reset input field
                 messageText.setText("");
 
-                mButtonSend.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        // Simulate message from AI tutor
+                boolean showMessageFromAkili = Math.random() > 0.5;
+                if (showMessageFromAkili) {
+                    mButtonSend.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            // Simulate message from AI tutor
 
-                        Message message = new Message();
-                        message.setStudentId("00000000aaaaaaaa_1");
-                        message.setTimeSent(Calendar.getInstance());
-                        message.setText(getRandomEmoji());
+                            // Akili
+                            Message message = new Message();
+                            message.setStudentId("00000000aaaaaaaa_1");
+                            message.setTimeSent(Calendar.getInstance());
+                            message.setText(getRandomEmoji());
+                            addToMessageListAndRefresh(message);
+                        }
+                    }, 2000 + (int) (Math.random() * 8000));
+                }
 
-                        // Add to UI
-                        addToMessageListAndRefresh(message);
-                    }
-                }, (int) (Math.random() * 5000));
+                boolean showMessageFromPenguin = Math.random() > 0.5;
+                if (showMessageFromPenguin) {
+                    mButtonSend.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            // Penguin
+                            Message messagePenguin = new Message();
+                            messagePenguin.setStudentId("00000000aaaaaaaa_2");
+                            messagePenguin.setTimeSent(Calendar.getInstance());
+                            messagePenguin.setText(getRandomEmoji());
+                            addToMessageListAndRefresh(messagePenguin);
+                        }
+                    }, 2000 + (int) (Math.random() * 8000));
+                }
             }
         });
     }
@@ -202,6 +219,7 @@ public class ChatActivity extends Activity {
 
     private String getRandomEmoji() {
         int[] unicodes = new int[] {
+                // Emoticons
                 0x1F601,
                 0x1F602,
                 0x1F603,
@@ -260,6 +278,31 @@ public class ChatActivity extends Activity {
                 0x1F64D,
                 0x1F64E,
                 0x1F64F,
+
+                // Uncategorized
+                0x1F40C,
+                0x1F40D,
+                0x1F40E,
+                0x1F411,
+                0x1F412,
+                0x1F414,
+                0x1F418,
+                0x1F419,
+                0x1F41A,
+                0x1F41B,
+                0x1F41C,
+                0x1F41D,
+                0x1F41E,
+                0x1F41F,
+                0x1F420,
+                0x1F421,
+                0x1F422,
+                0x1F423,
+                0x1F424,
+                0x1F425,
+                0x1F426,
+                0x1F427,
+                0x1F428,
         };
         int randomIndex = (int) (Math.random() * unicodes.length);
         int unicode = unicodes[randomIndex];
