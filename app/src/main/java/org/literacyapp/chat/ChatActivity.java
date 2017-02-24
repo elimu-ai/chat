@@ -68,6 +68,10 @@ public class ChatActivity extends Activity {
             return;
         }
 
+//        ContentProvider.initializeDb(this);
+//        List<Letter> letters = ContentProvider.getAvailableLetters();
+//        Log.i(getClass().getName(), "letters: " + letters);
+
         // Load messages sent within the last 24 hours
         Calendar calendar24HoursAgo = Calendar.getInstance();
         calendar24HoursAgo.add(Calendar.HOUR_OF_DAY, -24);
