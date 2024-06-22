@@ -3,7 +3,7 @@
 ## Installation
 
 > [!IMPORTANT]
-> Note: This app depends on the [elimu.ai IME Keyboard](https://github.com/elimu-ai/keyboard) to be installed.
+> Note: This app depends on the custom elimu.ai [IME Keyboard](https://github.com/elimu-ai/keyboard) to be installed.
 
 ---
 
