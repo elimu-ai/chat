@@ -1,4 +1,4 @@
-package org.literacyapp.chat;
+package ai.elimu.chat;
 
 import android.content.Context;
 import android.content.SharedPreferences;

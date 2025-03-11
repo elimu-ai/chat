@@ -1,4 +1,4 @@
-package org.literacyapp.chat.dao.converter;
+package ai.elimu.chat.dao.converter;
 
 import org.greenrobot.greendao.converter.PropertyConverter;
 

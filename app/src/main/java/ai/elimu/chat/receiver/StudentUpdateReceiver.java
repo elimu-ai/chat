@@ -1,4 +1,4 @@
-package org.literacyapp.chat.receiver;
+package ai.elimu.chat.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

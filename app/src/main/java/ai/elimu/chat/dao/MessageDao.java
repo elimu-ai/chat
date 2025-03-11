@@ -1,4 +1,4 @@
-package org.literacyapp.chat.dao;
+package ai.elimu.chat.dao;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteStatement;

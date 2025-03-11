@@ -1,4 +1,4 @@
-package org.literacyapp.chat.model;
+package ai.elimu.chat.model;
 
 import org.greenrobot.greendao.annotation.Convert;
 import org.greenrobot.greendao.annotation.Entity;

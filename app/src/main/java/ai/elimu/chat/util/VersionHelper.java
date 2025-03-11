@@ -1,4 +1,4 @@
-package org.literacyapp.chat.util;
+package ai.elimu.chat.util;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;

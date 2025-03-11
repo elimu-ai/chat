@@ -1,4 +1,4 @@
-package org.literacyapp.chat;
+package ai.elimu.chat;
 
 import org.junit.Test;
 
