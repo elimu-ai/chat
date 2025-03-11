@@ -5,7 +5,7 @@ import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.NotNull;
-import org.literacyapp.chat.dao.converter.CalendarConverter;
+import ai.elimu.chat.dao.converter.CalendarConverter;
 
 import java.util.Calendar;
 

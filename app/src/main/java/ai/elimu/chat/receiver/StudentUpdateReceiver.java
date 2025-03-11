@@ -8,10 +8,10 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 
-import org.literacyapp.chat.ChatApplication;
-import org.literacyapp.chat.dao.MessageDao;
-import org.literacyapp.chat.model.Message;
-import org.literacyapp.chat.util.DeviceInfoHelper;
+import ai.elimu.chat.ChatApplication;
+import ai.elimu.chat.dao.MessageDao;
+import ai.elimu.chat.model.Message;
+import ai.elimu.chat.util.DeviceInfoHelper;
 
 import java.util.List;
 
