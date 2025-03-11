@@ -1,4 +1,4 @@
-package org.literacyapp.chat;
+package ai.elimu.chat;
 
 import android.app.Application;
 import android.content.SharedPreferences;
@@ -6,9 +6,9 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import org.greenrobot.greendao.database.Database;
-import org.literacyapp.chat.dao.DaoMaster;
-import org.literacyapp.chat.dao.DaoSession;
-import org.literacyapp.chat.util.VersionHelper;
+import ai.elimu.chat.dao.DaoMaster;
+import ai.elimu.chat.dao.DaoSession;
+import ai.elimu.chat.util.VersionHelper;
 
 public class ChatApplication extends Application {
 

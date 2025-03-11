@@ -1,4 +1,4 @@
-package org.literacyapp.chat;
+package ai.elimu.chat;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

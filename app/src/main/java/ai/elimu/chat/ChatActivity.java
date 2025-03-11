@@ -1,4 +1,4 @@
-package org.literacyapp.chat;
+package ai.elimu.chat;
 
 import android.Manifest;
 import android.app.Activity;
@@ -18,10 +18,10 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
-import org.literacyapp.chat.dao.MessageDao;
-import org.literacyapp.chat.model.Message;
-import org.literacyapp.chat.receiver.StudentUpdateReceiver;
-import org.literacyapp.chat.util.DeviceInfoHelper;
+import ai.elimu.chat.dao.MessageDao;
+import ai.elimu.chat.model.Message;
+import ai.elimu.chat.receiver.StudentUpdateReceiver;
+import ai.elimu.chat.util.DeviceInfoHelper;
 
 import java.util.Calendar;
 import java.util.List;

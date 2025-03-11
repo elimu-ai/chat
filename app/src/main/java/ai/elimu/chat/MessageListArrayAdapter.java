@@ -1,4 +1,4 @@
-package org.literacyapp.chat;
+package ai.elimu.chat;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -14,8 +14,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.literacyapp.chat.model.Message;
-import org.literacyapp.chat.receiver.StudentUpdateReceiver;
+import ai.elimu.chat.model.Message;
+import ai.elimu.chat.receiver.StudentUpdateReceiver;
 
 import java.io.File;
 import java.util.List;
