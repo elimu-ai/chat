@@ -1,28 +1,32 @@
 apply plugin: 'com.android.application'
-apply plugin: 'org.greenrobot.greendao'
+//apply plugin: 'org.greenrobot.greendao'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.1"
-
-    compileOptions {
-        encoding = "UTF-8"
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
-    }
+    compileSdk 35
+    namespace 'ai.elimu.chat'
 
     defaultConfig {
-        applicationId "org.literacyapp.chat"
-        minSdkVersion 21
-        targetSdkVersion 23
-        versionCode 1001007
-        versionName "1.1.7"
+        applicationId "ai.elimu.chat"
+        minSdkVersion 26
+        targetSdkVersion 35
+        versionCode 2000000
+        versionName "2.0.0-SNAPSHOT"
     }
 
     buildTypes {
+        debug {
+            applicationIdSuffix ".debug"
+            versionNameSuffix "-debug"
+        }
         release {
             minifyEnabled false
         }
+    }
+
+    compileOptions {
+        encoding = "UTF-8"
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     lintOptions {
@@ -35,24 +39,24 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'org.greenrobot:greendao-gradle-plugin:3.2.1'
+//        classpath 'org.greenrobot:greendao-gradle-plugin:3.2.1'
     }
 }
 
-greendao {
-    schemaVersion android.defaultConfig.versionCode
-    targetGenDir = new File('app/src/main/java')
-    daoPackage = android.defaultConfig.applicationId + '.dao'
-}
+//greendao {
+//    schemaVersion android.defaultConfig.versionCode
+//    targetGenDir = new File('app/src/main/java')
+//    daoPackage = android.defaultConfig.applicationId + '.dao'
+//}
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    testCompile 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.12'
 
-    compile 'org.literacyapp:literacyapp-model:1.1.33'
-    compile 'org.literacyapp:contentprovider:1.5.2'
-    compile 'org.greenrobot:greendao:3.2.0'
-    compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'de.hdodenhof:circleimageview:2.1.0'
+    implementation 'com.github.elimu-ai:model:model-2.0.83' // See https://jitpack.io/#elimu-ai/model
+    implementation 'com.github.elimu-ai:content-provider:1.2.30@aar' // See https://jitpack.io/#elimu-ai/content-provider
+//    implementation 'org.greenrobot:greendao:3.2.0'
+    implementation 'com.android.support:appcompat-v7:23.4.0'
+    implementation 'de.hdodenhof:circleimageview:2.1.0'
 }
