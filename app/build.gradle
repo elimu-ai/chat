@@ -55,7 +55,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
 
     implementation 'com.github.elimu-ai:model:model-2.0.97' // See https://jitpack.io/#elimu-ai/model
-    implementation 'com.github.elimu-ai:content-provider:1.2.38@aar' // See https://jitpack.io/#elimu-ai/content-provider
+    implementation 'com.github.elimu-ai:content-provider:1.2.39@aar' // See https://jitpack.io/#elimu-ai/content-provider
     implementation 'org.greenrobot:greendao:3.3.0'
     implementation 'com.android.support:appcompat-v7:23.4.0'
     implementation 'de.hdodenhof:circleimageview:2.1.0'
