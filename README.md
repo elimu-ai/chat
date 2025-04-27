@@ -1,4 +1,8 @@
+[![](https://jitpack.io/v/ai.elimu/chat.svg)](https://jitpack.io/#ai.elimu/chat)
+
 # Chat 🗨️
+
+Android application for chatting with Nya, the AI tutor
 
 ## Installation
 
@@ -11,7 +15,7 @@
   <img src="https://github.com/elimu-ai/webapp/blob/main/src/main/webapp/static/img/logo-text-256x78.png" />
 </p>
 <p align="center">
-  elimu.ai - Free open-source learning software for out-of-school children ✨🚀
+  elimu.ai - Free open-source learning software for out-of-school children 🚀✨
 </p>
 <p align="center">
   <a href="https://elimu.ai">Website 🌐</a>

@@ -1,9 +1,10 @@
 apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
+apply plugin: 'maven-publish'
 
 android {
-    compileSdk 35
     namespace 'ai.elimu.chat'
+    compileSdk 35
 
     defaultConfig {
         applicationId "ai.elimu.chat"
@@ -11,6 +12,7 @@ android {
         targetSdkVersion 35
         versionCode 2000001
         versionName "2.0.1-SNAPSHOT"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -52,11 +54,25 @@ greendao {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    testImplementation 'junit:junit:4.12'
-
-    implementation 'com.github.elimu-ai:model:model-2.0.97' // See https://jitpack.io/#elimu-ai/model
-    implementation 'com.github.elimu-ai:content-provider:1.2.38@aar' // See https://jitpack.io/#elimu-ai/content-provider
+    implementation 'ai.elimu:model:model-2.0.97' // https://jitpack.io/#ai.elimu/model
+    implementation 'ai.elimu:content-provider:1.2.38@aar' // https://jitpack.io/#ai.elimu/content-provider
     implementation 'org.greenrobot:greendao:3.3.0'
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'de.hdodenhof:circleimageview:2.1.0'
+
+    testImplementation 'junit:junit:4.13.2'
+
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
+}
+
+publishing {
+    publications {
+        apk(MavenPublication) {
+            artifact("${buildDir}/outputs/apk/release/app-release-unsigned.apk")
+        }
+    }
+}
+tasks.named("publishApkPublicationToMavenLocal") {
+    mustRunAfter(":app:assembleRelease")
 }
