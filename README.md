@@ -1,3 +1,5 @@
+[![](https://jitpack.io/v/ai.elimu/chat.svg)](https://jitpack.io/#ai.elimu/chat)
+
 # Chat 🗨️
 
 Android application for chatting with Nya, the AI tutor
