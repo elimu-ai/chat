@@ -4,6 +4,10 @@
 
 Android application for chatting with Nya, the AI tutor
 
+Literacy skills:
+* [`FAMILIAR_WORD_READING`](https://github.com/elimu-ai/wiki/blob/main/literacy-skills/FAMILIAR_WORD_READING.md)
+* [`DICTATION`](https://github.com/elimu-ai/wiki/blob/main/literacy-skills/DICTATION.md)
+
 ## Installation
 
 > [!IMPORTANT]

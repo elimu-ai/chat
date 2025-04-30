@@ -1,3 +1,6 @@
+import java.util.regex.Matcher
+import java.util.regex.Pattern
+
 apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
 apply plugin: 'maven-publish'
@@ -10,8 +13,8 @@ android {
         applicationId "ai.elimu.chat"
         minSdkVersion 26
         targetSdkVersion 35
-        versionCode 2000001
-        versionName "2.0.1-SNAPSHOT"
+        versionCode 2001000
+        versionName "2.1.0-SNAPSHOT"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -32,7 +35,7 @@ android {
     }
 
     lintOptions {
-        abortOnError false
+        abortOnError true
     }
 }
 
@@ -54,10 +57,9 @@ greendao {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'ai.elimu:model:model-2.0.103' // https://jitpack.io/#ai.elimu/model
-    implementation 'ai.elimu:content-provider:1.2.38@aar' // https://jitpack.io/#ai.elimu/content-provider
+    implementation 'ai.elimu:content-provider:1.3.0' // https://jitpack.io/#ai.elimu/content-provider
+
     implementation 'org.greenrobot:greendao:3.3.0'
-    implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'de.hdodenhof:circleimageview:2.1.0'
 
     testImplementation 'junit:junit:4.13.2'
@@ -75,4 +77,68 @@ publishing {
 }
 tasks.named("publishApkPublicationToMavenLocal") {
     mustRunAfter(":app:assembleRelease")
+}
+
+tasks.register('removeSnapshot') {
+    doLast {
+        println("removeSnapshot")
+
+        def file = file("build.gradle")
+        def originalFileContent = file.getText()
+
+        Pattern pattern = Pattern.compile("versionName \"\\d+\\.\\d+\\.\\d+-SNAPSHOT\"")
+        Matcher matcher = pattern.matcher(originalFileContent)
+        matcher.find()
+        println("match: ${matcher.group()}")
+
+        def newVersionName = matcher.group().replace("-SNAPSHOT", "")
+        println("newVersionName: ${newVersionName}")
+
+        def newFileContent = originalFileContent.replaceFirst("versionName \"\\d+\\.\\d+\\.\\d+-SNAPSHOT\"", newVersionName)
+        file.write(newFileContent)
+    }
+}
+tasks.register('getVersionName') {
+    doLast {
+        println android.defaultConfig.versionName
+    }
+}
+tasks.register('bumpVersion') {
+    doLast {
+        println("bumpVersion")
+
+        def currentVersionCode = android.defaultConfig.versionCode
+        println("currentVersionCode: ${currentVersionCode}")
+
+        def newVersionCode = currentVersionCode + 1
+        println("newVersionCode: ${newVersionCode}")
+
+        def newVersionName = newVersionCode.toString().substring(0, 1).toInteger() + "." + newVersionCode.toString().substring(1, 4).toInteger() + "." + newVersionCode.toString().substring(4, 7).toInteger()
+        println("newVersionName: ${newVersionName}")
+
+        def file = file("build.gradle")
+        def originalFileContent = file.getText()
+        def newFileContent = originalFileContent.replaceFirst("versionCode \\d+", "versionCode ${newVersionCode}")
+        newFileContent = newFileContent.replaceFirst("versionName \"\\d+\\.\\d+\\.\\d+\"", "versionName \"${newVersionName}\"")
+        file.write(newFileContent)
+    }
+}
+tasks.register('addSnapshot') {
+    doLast {
+        println("addSnapshot")
+
+        def file = file("build.gradle")
+        def originalFileContent = file.getText()
+
+        Pattern pattern = Pattern.compile("versionName \"\\d+\\.\\d+\\.\\d+\"")
+        Matcher matcher = pattern.matcher(originalFileContent)
+        matcher.find()
+        println("match: ${matcher.group()}")
+
+        def newVersionName = "${matcher.group().substring(12, matcher.group().length() - 1)}-SNAPSHOT\""
+        println("newVersionName: ${newVersionName}")
+
+        def newFileContent = originalFileContent.replaceFirst("versionName \"\\d+\\.\\d+\\.\\d+\"", "versionName ${newVersionName}")
+        file.write(newFileContent)
+    }
 }
