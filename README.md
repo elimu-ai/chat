@@ -8,6 +8,14 @@ Literacy skills:
 * [`FAMILIAR_WORD_READING`](https://github.com/elimu-ai/wiki/blob/main/literacy-skills/FAMILIAR_WORD_READING.md)
 * [`DICTATION`](https://github.com/elimu-ai/wiki/blob/main/literacy-skills/DICTATION.md)
 
+## Screenshots 📸
+
+![](https://github.com/user-attachments/assets/80f10c7f-d162-4065-8f28-5a66d10d63ba)
+
+## Demo Videos 🎥
+
+...
+
 ## Installation
 
 > [!IMPORTANT]
