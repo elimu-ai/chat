@@ -40,3 +40,4 @@ captures/
 *.jks
 
 /projectFilesBackup/
+app/src/main/java/ai/elimu/chat/dao/DaoMaster.java
