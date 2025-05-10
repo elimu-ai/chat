@@ -1,84 +1,79 @@
-package ai.elimu.chat;
+package ai.elimu.chat
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.preference.PreferenceManager;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
+import ai.elimu.chat.model.Message
+import ai.elimu.chat.receiver.StudentUpdateReceiver
+import android.content.Context
+import android.graphics.BitmapFactory
+import android.preference.PreferenceManager
+import android.text.TextUtils
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.ImageView
+import android.widget.TextView
+import java.io.File
 
-import ai.elimu.chat.model.Message;
-import ai.elimu.chat.receiver.StudentUpdateReceiver;
+class MessageListArrayAdapter(context: Context, messages: MutableList<Message>) :
+    ArrayAdapter<Message?>(context, R.layout.activity_chat_list_item, messages) {
+    private val context: Context
 
-import java.io.File;
-import java.util.List;
+    private val messages: MutableList<Message>
 
-public class MessageListArrayAdapter extends ArrayAdapter<Message> {
+    private val studentId: String? // Id of current Student using the Device
 
-    private Context context;
-
-    private List<Message> messages;
-
-    private String studentId; // Id of current Student using the Device
-
-    static class ViewHolder {
-        ImageView imageViewAvatar;
-        TextView textViewListItem;
+    internal class ViewHolder {
+        var imageViewAvatar: ImageView? = null
+        var textViewListItem: TextView? = null
     }
 
-    public MessageListArrayAdapter(Context context, List<Message> messages) {
-        super(context, R.layout.activity_chat_list_item, messages);
-        Log.i(getClass().getName(), "MessageListArrayAdapter");
+    init {
+        Log.i(javaClass.getName(), "MessageListArrayAdapter")
 
-        this.context = context;
-        this.messages = messages;
+        this.context = context
+        this.messages = messages
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        studentId = sharedPreferences.getString(StudentUpdateReceiver.PREF_STUDENT_ID, null);
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        studentId = sharedPreferences.getString(StudentUpdateReceiver.PREF_STUDENT_ID, null)
     }
 
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        Log.i(getClass().getName(), "getView");
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        Log.i(javaClass.getName(), "getView")
 
-        Message message = messages.get(position);
+        val message = messages.get(position)
 
-        View listItem = null;
+        var listItem: View? = null
 
-        LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        if (TextUtils.isEmpty(message.getStudentId()) || message.getStudentId().equals(studentId)) {
+        val layoutInflater =
+            context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        if (TextUtils.isEmpty(message.getStudentId()) || message.getStudentId() == studentId) {
             // Align message to the left of the screen
-            listItem = layoutInflater.inflate(R.layout.activity_chat_list_item, parent, false);
+            listItem = layoutInflater.inflate(R.layout.activity_chat_list_item, parent, false)
         } else {
             // Align message to the right of the screen
-            listItem = layoutInflater.inflate(R.layout.activity_chat_list_item_right, parent, false);
+            listItem = layoutInflater.inflate(R.layout.activity_chat_list_item_right, parent, false)
         }
 
 
-        ViewHolder viewHolder = new ViewHolder();
-        viewHolder.imageViewAvatar = (ImageView) listItem.findViewById(R.id.imageViewAvatar);
-        viewHolder.textViewListItem = (TextView) listItem.findViewById(R.id.textViewListItem);
+        val viewHolder = ViewHolder()
+        viewHolder.imageViewAvatar = listItem.findViewById<View?>(R.id.imageViewAvatar) as ImageView
+        viewHolder.textViewListItem =
+            listItem.findViewById<View?>(R.id.textViewListItem) as TextView
 
-        viewHolder.textViewListItem.setText(message.getText());
+        viewHolder.textViewListItem!!.setText(message.getText())
 
         if (!TextUtils.isEmpty(message.getStudentAvatar())) {
-            File file = new File(message.getStudentAvatar());
+            val file = File(message.getStudentAvatar())
             if (file.exists()) {
-                Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-                viewHolder.imageViewAvatar.setImageBitmap(bitmap);
+                val bitmap = BitmapFactory.decodeFile(file.getAbsolutePath())
+                viewHolder.imageViewAvatar!!.setImageBitmap(bitmap)
             }
-        } else if ("00000000aaaaaaaa_2".equals(message.getStudentId())) {
+        } else if ("00000000aaaaaaaa_2" == message.getStudentId()) {
             // Penguin
-            viewHolder.imageViewAvatar.setImageDrawable(context.getDrawable(R.drawable.penguin));
+            viewHolder.imageViewAvatar!!.setImageDrawable(context.getDrawable(R.drawable.penguin))
         }
 
-        return listItem;
+        return listItem
     }
 }
