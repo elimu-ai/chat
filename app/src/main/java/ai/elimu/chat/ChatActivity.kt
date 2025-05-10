@@ -1,98 +1,86 @@
-package ai.elimu.chat;
+package ai.elimu.chat
 
-import android.app.Activity;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ListView;
+import ai.elimu.chat.dao.MessageDao
+import ai.elimu.chat.model.Message
+import ai.elimu.chat.receiver.StudentUpdateReceiver
+import ai.elimu.chat.util.DeviceInfoHelper
+import android.app.Activity
+import android.os.Bundle
+import android.preference.PreferenceManager
+import android.text.Editable
+import android.text.TextUtils
+import android.text.TextWatcher
+import android.util.Log
+import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.ListView
+import java.util.Calendar
 
-import ai.elimu.chat.dao.MessageDao;
-import ai.elimu.chat.model.Message;
-import ai.elimu.chat.receiver.StudentUpdateReceiver;
-import ai.elimu.chat.util.DeviceInfoHelper;
+class ChatActivity : Activity() {
+    private var messageDao: MessageDao? = null
 
-import java.util.Calendar;
-import java.util.List;
+    private var messages: MutableList<Message> = mutableListOf()
 
-public class ChatActivity extends Activity {
+    private var arrayAdapter: ArrayAdapter<*>? = null
 
-    private MessageDao messageDao;
+    private var mListPreviousMessages: ListView? = null
 
-    private List<Message> messages;
+    private var messageText: EditText? = null
 
-    private ArrayAdapter arrayAdapter;
+    private var mButtonSend: ImageButton? = null
 
-    private ListView mListPreviousMessages;
+    override fun onCreate(savedInstanceState: Bundle?) {
+        Log.i(javaClass.getName(), "onCreate")
+        super.onCreate(savedInstanceState)
 
-    private EditText messageText;
+        setContentView(R.layout.activity_chat)
 
-    private ImageButton mButtonSend;
+        messageDao = (getApplication() as ChatApplication).daoSession!!.getMessageDao()
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        Log.i(getClass().getName(), "onCreate");
-        super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_chat);
-
-        messageDao = ((ChatApplication) getApplication()).getDaoSession().getMessageDao();
-
-        mListPreviousMessages = (ListView) findViewById(R.id.listPreviousMessages);
-        messageText = (EditText) findViewById(R.id.message);
-        mButtonSend = (ImageButton) findViewById(R.id.buttonSend);
+        mListPreviousMessages = findViewById<View?>(R.id.listPreviousMessages) as ListView
+        messageText = findViewById<View?>(R.id.message) as EditText
+        mButtonSend = findViewById<View?>(R.id.buttonSend) as ImageButton
     }
 
-    @Override
-    protected void onStart() {
-        Log.i(getClass().getName(), "onStart");
-        super.onStart();
+    override fun onStart() {
+        Log.i(javaClass.getName(), "onStart")
+        super.onStart()
 
-//        ContentProvider.initializeDb(this);
+        //        ContentProvider.initializeDb(this);
 //        List<Letter> letters = ContentProvider.getAvailableLetters();
 //        Log.i(getClass().getName(), "letters: " + letters);
 
         // Load messages sent within the last 24 hours
-        Calendar calendar24HoursAgo = Calendar.getInstance();
-        calendar24HoursAgo.add(Calendar.HOUR_OF_DAY, -24);
-        messages = messageDao.queryBuilder()
-                .where(MessageDao.Properties.TimeSent.gt(calendar24HoursAgo.getTimeInMillis()))
-                .list();
-        Log.i(getClass().getName(), "messages.size(): " + messages.size());
+        val calendar24HoursAgo = Calendar.getInstance()
+        calendar24HoursAgo.add(Calendar.HOUR_OF_DAY, -24)
+        messages = messageDao!!.queryBuilder()
+            .where(MessageDao.Properties.TimeSent.gt(calendar24HoursAgo.getTimeInMillis()))
+            .list()
+        Log.i(javaClass.getName(), "messages.size(): " + messages!!.size)
 
-        arrayAdapter = new MessageListArrayAdapter(getApplicationContext(), messages);
-        mListPreviousMessages.setAdapter(arrayAdapter);
+        arrayAdapter = MessageListArrayAdapter(getApplicationContext(), messages)
+        mListPreviousMessages!!.setAdapter(arrayAdapter)
 
-        messageText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+        messageText!!.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(charSequence: CharSequence?, i: Int, i1: Int, i2: Int) {
             }
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+            override fun onTextChanged(charSequence: CharSequence?, i: Int, i1: Int, i2: Int) {
             }
 
-            @Override
-            public void afterTextChanged(Editable editable) {
-                Log.i(getClass().getName(), "afterTextChanged");
+            override fun afterTextChanged(editable: Editable?) {
+                Log.i(javaClass.getName(), "afterTextChanged")
 
-                Log.i(getClass().getName(), "editable: " + editable);
+                Log.i(javaClass.getName(), "editable: " + editable)
 
                 if (!TextUtils.isEmpty(editable)) {
-                    if (!mButtonSend.isEnabled()) {
-                        mButtonSend.setEnabled(true);
-                        mButtonSend.setImageDrawable(getDrawable(R.drawable.ic_send_white_24dp));
+                    if (!mButtonSend!!.isEnabled()) {
+                        mButtonSend!!.setEnabled(true)
+                        mButtonSend!!.setImageDrawable(getDrawable(R.drawable.ic_send_white_24dp))
 
-//                        // Animate button to indicate that it can be pressed
+                        //                        // Animate button to indicate that it can be pressed
 //                        final long duration = 300;
 //
 //                        final ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(mButtonSend, View.SCALE_X, 1f, 1.2f, 1f);
@@ -111,105 +99,106 @@ public class ChatActivity extends Activity {
 //                        animatorSet.start();
                     }
                 } else {
-                    mButtonSend.setEnabled(false);
-                    mButtonSend.setImageDrawable(getDrawable(R.drawable.ic_send_grey_24dp));
+                    mButtonSend!!.setEnabled(false)
+                    mButtonSend!!.setImageDrawable(getDrawable(R.drawable.ic_send_grey_24dp))
                 }
             }
-        });
+        })
 
         // Default to grey button
-        mButtonSend.setEnabled(false);
-        mButtonSend.setImageDrawable(getDrawable(R.drawable.ic_send_grey_24dp));
+        mButtonSend!!.setEnabled(false)
+        mButtonSend!!.setImageDrawable(getDrawable(R.drawable.ic_send_grey_24dp))
 
-        mButtonSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.i(getClass().getName(), "mButtonSend onClick");
+        mButtonSend!!.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View?) {
+                Log.i(javaClass.getName(), "mButtonSend onClick")
 
-                String text = messageText.getText().toString();
-                Log.i(getClass().getName(), "text: " + text);
+                val text = messageText!!.getText().toString()
+                Log.i(javaClass.getName(), "text: " + text)
 
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                val sharedPreferences =
+                    PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
 
                 // Store in database
-                Message message = new Message();
-                message.setDeviceId(DeviceInfoHelper.getDeviceId(getApplicationContext()));
-                String studentId = sharedPreferences.getString(StudentUpdateReceiver.PREF_STUDENT_ID, null);
+                val message = Message()
+                message.setDeviceId(DeviceInfoHelper.getDeviceId(getApplicationContext()))
+                val studentId =
+                    sharedPreferences.getString(StudentUpdateReceiver.PREF_STUDENT_ID, null)
                 if (!TextUtils.isEmpty(studentId)) {
-                    message.setStudentId(studentId);
+                    message.setStudentId(studentId)
                 }
-                String studentAvatar = sharedPreferences.getString(StudentUpdateReceiver.PREF_STUDENT_AVATAR, null);
+                val studentAvatar =
+                    sharedPreferences.getString(StudentUpdateReceiver.PREF_STUDENT_AVATAR, null)
                 if (!TextUtils.isEmpty(studentAvatar)) {
-                    message.setStudentAvatar(studentAvatar);
+                    message.setStudentAvatar(studentAvatar)
                 }
-                message.setTimeSent(Calendar.getInstance());
-                message.setText(text);
-                messageDao.insert(message);
+                message.setTimeSent(Calendar.getInstance())
+                message.setText(text)
+                messageDao!!.insert(message)
 
                 // Add to UI
-                addToMessageListAndRefresh(message);
+                addToMessageListAndRefresh(message)
 
                 // Reset input field
-                messageText.setText("");
+                messageText!!.setText("")
 
-                boolean showMessageFromAkili = Math.random() > 0.5;
+                val showMessageFromAkili = Math.random() > 0.5
                 if (showMessageFromAkili) {
-                    mButtonSend.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
+                    mButtonSend!!.postDelayed(object : Runnable {
+                        override fun run() {
                             // Simulate message from AI tutor
 
                             // Akili
-                            Message message = new Message();
-                            message.setStudentId("00000000aaaaaaaa_1");
-                            message.setTimeSent(Calendar.getInstance());
-                            message.setText(getRandomEmoji());
-                            addToMessageListAndRefresh(message);
+
+                            val message = Message()
+                            message.setStudentId("00000000aaaaaaaa_1")
+                            message.setTimeSent(Calendar.getInstance())
+                            message.setText(randomEmoji)
+                            addToMessageListAndRefresh(message)
                         }
-                    }, 2000 + (int) (Math.random() * 8000));
+                    }, (2000 + (Math.random() * 8000).toInt()).toLong())
                 }
 
-                boolean showMessageFromPenguin = Math.random() > 0.5;
+                val showMessageFromPenguin = Math.random() > 0.5
                 if (showMessageFromPenguin) {
-                    mButtonSend.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
+                    mButtonSend!!.postDelayed(object : Runnable {
+                        override fun run() {
                             // Penguin
-                            Message messagePenguin = new Message();
-                            messagePenguin.setStudentId("00000000aaaaaaaa_2");
-                            messagePenguin.setTimeSent(Calendar.getInstance());
-                            messagePenguin.setText(getRandomEmoji());
-                            addToMessageListAndRefresh(messagePenguin);
+                            val messagePenguin = Message()
+                            messagePenguin.setStudentId("00000000aaaaaaaa_2")
+                            messagePenguin.setTimeSent(Calendar.getInstance())
+                            messagePenguin.setText(randomEmoji)
+                            addToMessageListAndRefresh(messagePenguin)
                         }
-                    }, 2000 + (int) (Math.random() * 8000));
+                    }, (2000 + (Math.random() * 8000).toInt()).toLong())
                 }
             }
-        });
+        })
     }
 
-    private void addToMessageListAndRefresh(Message message) {
-        Log.i(getClass().getName(), "addToMessageListAndRefresh");
-        messages.add(message);
-        refreshMessageList();
+    private fun addToMessageListAndRefresh(message: Message) {
+        Log.i(javaClass.getName(), "addToMessageListAndRefresh")
+        messages.add(message)
+        refreshMessageList()
     }
 
-    private void refreshMessageList() {
-        Log.i(getClass().getName(), "refreshMessageList");
+    private fun refreshMessageList() {
+        Log.i(javaClass.getName(), "refreshMessageList")
 
-        arrayAdapter.notifyDataSetChanged();
-        mListPreviousMessages.smoothScrollToPosition(mListPreviousMessages.getCount());
+        arrayAdapter!!.notifyDataSetChanged()
+        mListPreviousMessages!!.smoothScrollToPosition(mListPreviousMessages!!.getCount())
         // Fix problem with scrolling when keyboard is present
-        mListPreviousMessages.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Log.i(getClass().getName(), "mListPreviousMessages.postDelayed");
-                mListPreviousMessages.setSelection(mListPreviousMessages.getCount());
+        mListPreviousMessages!!.postDelayed(object : Runnable {
+            override fun run() {
+                Log.i(javaClass.getName(), "mListPreviousMessages.postDelayed")
+                mListPreviousMessages!!.setSelection(mListPreviousMessages!!.getCount())
             }
-        }, 100);
+        }, 100)
     }
 
-    private String getRandomEmoji() {
-        int[] unicodes = new int[] {
+    private val randomEmoji: String
+        get() {
+            val unicodes = intArrayOf(
                 // Emoticons
                 0x1F601,
                 0x1F602,
@@ -268,9 +257,8 @@ public class ChatActivity extends Activity {
                 0x1F64C,
                 0x1F64D,
                 0x1F64E,
-                0x1F64F,
+                0x1F64F,  // Uncategorized
 
-                // Uncategorized
                 0x1F40C,
                 0x1F40D,
                 0x1F40E,
@@ -294,21 +282,21 @@ public class ChatActivity extends Activity {
                 0x1F426,
                 0x1F427,
                 0x1F428,
-        };
-        int randomIndex = (int) (Math.random() * unicodes.length);
-        int unicode = unicodes[randomIndex];
-        Log.d(getClass().getName(), "unicode: " + unicode);
-        String emoji = getEmijoByUnicode(unicode);
-        Log.i(getClass().getName(), "emoji: " + emoji);
-        return emoji;
-    }
+            )
+            val randomIndex = (Math.random() * unicodes.size).toInt()
+            val unicode = unicodes[randomIndex]
+            Log.d(javaClass.getName(), "unicode: " + unicode)
+            val emoji = getEmijoByUnicode(unicode)
+            Log.i(javaClass.getName(), "emoji: " + emoji)
+            return emoji
+        }
 
     /**
      * See http://apps.timwhitlock.info/emoji/tables/unicode
      * @param unicode Example: "U+1F601" --> "0x1F601"
      * @return
      */
-    private String getEmijoByUnicode(int unicode) {
-        return new String(Character.toChars(unicode));
+    private fun getEmijoByUnicode(unicode: Int): String {
+        return String(Character.toChars(unicode))
     }
 }
