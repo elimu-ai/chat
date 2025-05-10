@@ -37,7 +37,7 @@ class ChatActivity : Activity() {
 
         setContentView(R.layout.activity_chat)
 
-        messageDao = (getApplication() as ChatApplication).daoSession!!.getMessageDao()
+        messageDao = (application as ChatApplication).daoSession!!.messageDao
 
         mListPreviousMessages = findViewById<View?>(R.id.listPreviousMessages) as ListView
         messageText = findViewById<View?>(R.id.message) as EditText
@@ -60,7 +60,7 @@ class ChatActivity : Activity() {
             .list()
         Log.i(javaClass.getName(), "messages.size(): " + messages!!.size)
 
-        arrayAdapter = MessageListArrayAdapter(getApplicationContext(), messages)
+        arrayAdapter = MessageListArrayAdapter(applicationContext, messages)
         mListPreviousMessages!!.setAdapter(arrayAdapter)
 
         messageText!!.addTextChangedListener(object : TextWatcher {
@@ -76,7 +76,7 @@ class ChatActivity : Activity() {
                 Log.i(javaClass.getName(), "editable: " + editable)
 
                 if (!TextUtils.isEmpty(editable)) {
-                    if (!mButtonSend!!.isEnabled()) {
+                    if (!mButtonSend!!.isEnabled) {
                         mButtonSend!!.setEnabled(true)
                         mButtonSend!!.setImageDrawable(getDrawable(R.drawable.ic_send_white_24dp))
 
@@ -117,23 +117,23 @@ class ChatActivity : Activity() {
                 Log.i(javaClass.getName(), "text: " + text)
 
                 val sharedPreferences =
-                    PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                    PreferenceManager.getDefaultSharedPreferences(applicationContext)
 
                 // Store in database
                 val message = Message()
-                message.setDeviceId(DeviceInfoHelper.getDeviceId(getApplicationContext()))
+                message.deviceId = DeviceInfoHelper.getDeviceId(applicationContext)
                 val studentId =
                     sharedPreferences.getString(StudentUpdateReceiver.PREF_STUDENT_ID, null)
                 if (!TextUtils.isEmpty(studentId)) {
-                    message.setStudentId(studentId)
+                    message.studentId = studentId
                 }
                 val studentAvatar =
                     sharedPreferences.getString(StudentUpdateReceiver.PREF_STUDENT_AVATAR, null)
                 if (!TextUtils.isEmpty(studentAvatar)) {
-                    message.setStudentAvatar(studentAvatar)
+                    message.studentAvatar = studentAvatar
                 }
-                message.setTimeSent(Calendar.getInstance())
-                message.setText(text)
+                message.timeSent = Calendar.getInstance()
+                message.text = text
                 messageDao!!.insert(message)
 
                 // Add to UI
@@ -151,9 +151,9 @@ class ChatActivity : Activity() {
                             // Akili
 
                             val message = Message()
-                            message.setStudentId("00000000aaaaaaaa_1")
-                            message.setTimeSent(Calendar.getInstance())
-                            message.setText(randomEmoji)
+                            message.studentId = "00000000aaaaaaaa_1"
+                            message.timeSent = Calendar.getInstance()
+                            message.text = randomEmoji
                             addToMessageListAndRefresh(message)
                         }
                     }, (2000 + (Math.random() * 8000).toInt()).toLong())
@@ -165,9 +165,9 @@ class ChatActivity : Activity() {
                         override fun run() {
                             // Penguin
                             val messagePenguin = Message()
-                            messagePenguin.setStudentId("00000000aaaaaaaa_2")
-                            messagePenguin.setTimeSent(Calendar.getInstance())
-                            messagePenguin.setText(randomEmoji)
+                            messagePenguin.studentId = "00000000aaaaaaaa_2"
+                            messagePenguin.timeSent = Calendar.getInstance()
+                            messagePenguin.text = randomEmoji
                             addToMessageListAndRefresh(messagePenguin)
                         }
                     }, (2000 + (Math.random() * 8000).toInt()).toLong())
@@ -186,12 +186,12 @@ class ChatActivity : Activity() {
         Log.i(javaClass.getName(), "refreshMessageList")
 
         arrayAdapter!!.notifyDataSetChanged()
-        mListPreviousMessages!!.smoothScrollToPosition(mListPreviousMessages!!.getCount())
+        mListPreviousMessages!!.smoothScrollToPosition(mListPreviousMessages!!.count)
         // Fix problem with scrolling when keyboard is present
         mListPreviousMessages!!.postDelayed(object : Runnable {
             override fun run() {
                 Log.i(javaClass.getName(), "mListPreviousMessages.postDelayed")
-                mListPreviousMessages!!.setSelection(mListPreviousMessages!!.getCount())
+                mListPreviousMessages!!.setSelection(mListPreviousMessages!!.count)
             }
         }, 100)
     }

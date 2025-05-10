@@ -47,7 +47,7 @@ class MessageListArrayAdapter(context: Context, messages: List<Message>) :
 
         val layoutInflater =
             context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        if (TextUtils.isEmpty(message.getStudentId()) || message.getStudentId() == studentId) {
+        if (TextUtils.isEmpty(message.studentId) || message.studentId == studentId) {
             // Align message to the left of the screen
             listItem = layoutInflater.inflate(R.layout.activity_chat_list_item, parent, false)
         } else {
@@ -61,15 +61,15 @@ class MessageListArrayAdapter(context: Context, messages: List<Message>) :
         viewHolder.textViewListItem =
             listItem.findViewById<View?>(R.id.textViewListItem) as TextView
 
-        viewHolder.textViewListItem!!.setText(message.getText())
+        viewHolder.textViewListItem!!.text = message.text
 
-        if (!TextUtils.isEmpty(message.getStudentAvatar())) {
-            val file = File(message.getStudentAvatar())
+        if (!TextUtils.isEmpty(message.studentAvatar)) {
+            val file = File(message.studentAvatar)
             if (file.exists()) {
-                val bitmap = BitmapFactory.decodeFile(file.getAbsolutePath())
+                val bitmap = BitmapFactory.decodeFile(file.absolutePath)
                 viewHolder.imageViewAvatar!!.setImageBitmap(bitmap)
             }
-        } else if ("00000000aaaaaaaa_2" == message.getStudentId()) {
+        } else if ("00000000aaaaaaaa_2" == message.studentId) {
             // Penguin
             viewHolder.imageViewAvatar!!.setImageDrawable(context.getDrawable(R.drawable.penguin))
         }
