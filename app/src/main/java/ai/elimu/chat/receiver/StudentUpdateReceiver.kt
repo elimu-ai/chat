@@ -9,6 +9,7 @@ import android.content.Intent
 import android.preference.PreferenceManager
 import android.text.TextUtils
 import android.util.Log
+import androidx.core.content.edit
 
 class StudentUpdateReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
@@ -43,11 +44,11 @@ class StudentUpdateReceiver : BroadcastReceiver() {
                 }
             }
 
-            sharedPreferences.edit().putString(PREF_STUDENT_ID, studentId).commit()
+            sharedPreferences.edit(commit = true) { putString(PREF_STUDENT_ID, studentId) }
         }
 
         if (!TextUtils.isEmpty(studentAvatar)) {
-            sharedPreferences.edit().putString(PREF_STUDENT_AVATAR, studentAvatar).commit()
+            sharedPreferences.edit(commit = true) { putString(PREF_STUDENT_AVATAR, studentAvatar) }
         }
     }
 
