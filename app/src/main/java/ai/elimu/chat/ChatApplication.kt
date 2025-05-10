@@ -7,6 +7,7 @@ import ai.elimu.chat.util.VersionHelper
 import android.app.Application
 import android.preference.PreferenceManager
 import android.util.Log
+import androidx.core.content.edit
 
 class ChatApplication : Application() {
     var daoSession: DaoSession? = null
@@ -26,7 +27,7 @@ class ChatApplication : Application() {
         var oldVersionCode = sharedPreferences.getInt(PREF_APP_VERSION_CODE, 0)
         val newVersionCode = VersionHelper.getAppVersionCode(applicationContext)
         if (oldVersionCode == 0) {
-            sharedPreferences.edit().putInt(PREF_APP_VERSION_CODE, newVersionCode).commit()
+            sharedPreferences.edit(commit = true) { putInt(PREF_APP_VERSION_CODE, newVersionCode) }
             oldVersionCode = newVersionCode
         }
         if (oldVersionCode < newVersionCode) {
@@ -37,7 +38,7 @@ class ChatApplication : Application() {
             //            if (newVersionCode == ???) {
 //                // Put relevant tasks required for upgrading here
 //            }
-            sharedPreferences.edit().putInt(PREF_APP_VERSION_CODE, newVersionCode).commit()
+            sharedPreferences.edit(commit = true) { putInt(PREF_APP_VERSION_CODE, newVersionCode) }
         }
     }
 
