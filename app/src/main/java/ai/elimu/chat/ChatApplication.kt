@@ -1,48 +1,47 @@
-package ai.elimu.chat;
+package ai.elimu.chat
 
-import android.app.Application;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.util.Log;
+import ai.elimu.chat.dao.DaoMaster
+import ai.elimu.chat.dao.DaoMaster.DevOpenHelper
+import ai.elimu.chat.dao.DaoSession
+import ai.elimu.chat.util.VersionHelper
+import android.app.Application
+import android.preference.PreferenceManager
+import android.util.Log
 
-import org.greenrobot.greendao.database.Database;
-import ai.elimu.chat.dao.DaoMaster;
-import ai.elimu.chat.dao.DaoSession;
-import ai.elimu.chat.util.VersionHelper;
+class ChatApplication : Application() {
+    var daoSession: DaoSession? = null
+        private set
 
-public class ChatApplication extends Application {
+    override fun onCreate() {
+        Log.i(javaClass.getName(), "onCreate")
+        super.onCreate()
 
-    public static final String PREF_APP_VERSION_CODE = "pref_app_version_code";
-
-    private DaoSession daoSession;
-
-    @Override
-    public void onCreate() {
-        Log.i(getClass().getName(), "onCreate");
-        super.onCreate();
-
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "chat-db");
-        Database db = helper.getWritableDb();
-        daoSession = new DaoMaster(db).newSession();
+        val helper = DevOpenHelper(this, "chat-db")
+        val db = helper.getWritableDb()
+        daoSession = DaoMaster(db).newSession()
 
         // Check if the application's versionCode was upgraded
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        int oldVersionCode = sharedPreferences.getInt(PREF_APP_VERSION_CODE, 0);
-        int newVersionCode = VersionHelper.getAppVersionCode(getApplicationContext());
+        val sharedPreferences =
+            PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+        var oldVersionCode = sharedPreferences.getInt(PREF_APP_VERSION_CODE, 0)
+        val newVersionCode = VersionHelper.getAppVersionCode(getApplicationContext())
         if (oldVersionCode == 0) {
-            sharedPreferences.edit().putInt(PREF_APP_VERSION_CODE, newVersionCode).commit();
-            oldVersionCode = newVersionCode;
+            sharedPreferences.edit().putInt(PREF_APP_VERSION_CODE, newVersionCode).commit()
+            oldVersionCode = newVersionCode
         }
         if (oldVersionCode < newVersionCode) {
-            Log.i(getClass().getName(), "Upgrading application from version " + oldVersionCode + " to " + newVersionCode);
-//            if (newVersionCode == ???) {
+            Log.i(
+                javaClass.getName(),
+                "Upgrading application from version " + oldVersionCode + " to " + newVersionCode
+            )
+            //            if (newVersionCode == ???) {
 //                // Put relevant tasks required for upgrading here
 //            }
-            sharedPreferences.edit().putInt(PREF_APP_VERSION_CODE, newVersionCode).commit();
+            sharedPreferences.edit().putInt(PREF_APP_VERSION_CODE, newVersionCode).commit()
         }
     }
 
-    public DaoSession getDaoSession() {
-        return daoSession;
+    companion object {
+        const val PREF_APP_VERSION_CODE: String = "pref_app_version_code"
     }
 }
