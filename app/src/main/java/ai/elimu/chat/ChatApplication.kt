@@ -32,7 +32,7 @@ class ChatApplication : Application() {
         if (oldVersionCode < newVersionCode) {
             Log.i(
                 javaClass.getName(),
-                "Upgrading application from version " + oldVersionCode + " to " + newVersionCode
+                "Upgrading application from version $oldVersionCode to $newVersionCode"
             )
             //            if (newVersionCode == ???) {
 //                // Put relevant tasks required for upgrading here

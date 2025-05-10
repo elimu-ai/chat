@@ -16,7 +16,7 @@ object VersionHelper {
                 context.packageManager.getPackageInfo(context.packageName, 0)
             return packageInfo.versionCode
         } catch (e: PackageManager.NameNotFoundException) {
-            throw RuntimeException("Could not get package name: " + e)
+            throw RuntimeException("Could not get package name: $e")
         }
     }
 }

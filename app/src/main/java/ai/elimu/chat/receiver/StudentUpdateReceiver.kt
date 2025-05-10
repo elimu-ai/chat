@@ -15,16 +15,16 @@ class StudentUpdateReceiver : BroadcastReceiver() {
         Log.i(javaClass.getName(), "onReceive")
 
         val studentId = intent.getStringExtra("studentId")
-        Log.i(javaClass.getName(), "studentId: " + studentId)
+        Log.i(javaClass.getName(), "studentId: $studentId")
 
         val studentAvatar = intent.getStringExtra("studentAvatar")
-        Log.i(javaClass.getName(), "studentAvatar: " + studentAvatar)
+        Log.i(javaClass.getName(), "studentAvatar: $studentAvatar")
 
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 
         if (!TextUtils.isEmpty(studentId)) {
             val existingStudentId = sharedPreferences.getString(PREF_STUDENT_ID, null)
-            Log.i(javaClass.getName(), "existingStudentId: " + existingStudentId)
+            Log.i(javaClass.getName(), "existingStudentId: $existingStudentId")
             if (TextUtils.isEmpty(existingStudentId)) {
                 // Update previously sent messages on the current device
                 val chatApplication = context.applicationContext as ChatApplication

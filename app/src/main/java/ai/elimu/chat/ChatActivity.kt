@@ -73,7 +73,7 @@ class ChatActivity : Activity() {
             override fun afterTextChanged(editable: Editable?) {
                 Log.i(javaClass.getName(), "afterTextChanged")
 
-                Log.i(javaClass.getName(), "editable: " + editable)
+                Log.i(javaClass.getName(), "editable: $editable")
 
                 if (!TextUtils.isEmpty(editable)) {
                     if (!mButtonSend!!.isEnabled) {
@@ -114,7 +114,7 @@ class ChatActivity : Activity() {
                 Log.i(javaClass.getName(), "mButtonSend onClick")
 
                 val text = messageText!!.getText().toString()
-                Log.i(javaClass.getName(), "text: " + text)
+                Log.i(javaClass.getName(), "text: $text")
 
                 val sharedPreferences =
                     PreferenceManager.getDefaultSharedPreferences(applicationContext)
@@ -285,9 +285,9 @@ class ChatActivity : Activity() {
             )
             val randomIndex = (Math.random() * unicodes.size).toInt()
             val unicode = unicodes[randomIndex]
-            Log.d(javaClass.getName(), "unicode: " + unicode)
+            Log.d(javaClass.getName(), "unicode: $unicode")
             val emoji = getEmijoByUnicode(unicode)
-            Log.i(javaClass.getName(), "emoji: " + emoji)
+            Log.i(javaClass.getName(), "emoji: $emoji")
             return emoji
         }
 
