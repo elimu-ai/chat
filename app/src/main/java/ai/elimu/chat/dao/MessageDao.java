@@ -10,7 +10,6 @@ import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.database.DatabaseStatement;
 
 import ai.elimu.chat.dao.converter.CalendarConverter;
-import java.util.Calendar;
 
 import ai.elimu.chat.model.Message;
 
