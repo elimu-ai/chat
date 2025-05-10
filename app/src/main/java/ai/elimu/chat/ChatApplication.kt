@@ -17,14 +17,14 @@ class ChatApplication : Application() {
         super.onCreate()
 
         val helper = DevOpenHelper(this, "chat-db")
-        val db = helper.getWritableDb()
+        val db = helper.writableDb
         daoSession = DaoMaster(db).newSession()
 
         // Check if the application's versionCode was upgraded
         val sharedPreferences =
-            PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+            PreferenceManager.getDefaultSharedPreferences(applicationContext)
         var oldVersionCode = sharedPreferences.getInt(PREF_APP_VERSION_CODE, 0)
-        val newVersionCode = VersionHelper.getAppVersionCode(getApplicationContext())
+        val newVersionCode = VersionHelper.getAppVersionCode(applicationContext)
         if (oldVersionCode == 0) {
             sharedPreferences.edit().putInt(PREF_APP_VERSION_CODE, newVersionCode).commit()
             oldVersionCode = newVersionCode

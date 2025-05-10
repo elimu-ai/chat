@@ -13,7 +13,7 @@ object VersionHelper {
 
         try {
             val packageInfo =
-                context.getPackageManager().getPackageInfo(context.getPackageName(), 0)
+                context.packageManager.getPackageInfo(context.packageName, 0)
             return packageInfo.versionCode
         } catch (e: PackageManager.NameNotFoundException) {
             throw RuntimeException("Could not get package name: " + e)

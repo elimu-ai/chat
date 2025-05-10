@@ -27,8 +27,8 @@ class StudentUpdateReceiver : BroadcastReceiver() {
             Log.i(javaClass.getName(), "existingStudentId: " + existingStudentId)
             if (TextUtils.isEmpty(existingStudentId)) {
                 // Update previously sent messages on the current device
-                val chatApplication = context.getApplicationContext() as ChatApplication
-                val messageDao = chatApplication.daoSession!!.getMessageDao()
+                val chatApplication = context.applicationContext as ChatApplication
+                val messageDao = chatApplication.daoSession!!.messageDao
                 val existingMessages = messageDao.queryBuilder()
                     .where(
                         MessageDao.Properties.DeviceId.eq(getDeviceId(context)),
@@ -37,8 +37,8 @@ class StudentUpdateReceiver : BroadcastReceiver() {
                     .list()
                 Log.i(javaClass.getName(), "existingMessages.size(): " + existingMessages.size)
                 for (message in existingMessages) {
-                    message.setStudentId(studentId)
-                    message.setStudentAvatar(studentAvatar)
+                    message.studentId = studentId
+                    message.studentAvatar = studentAvatar
                     messageDao.update(message)
                 }
             }

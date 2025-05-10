@@ -6,6 +6,6 @@ import android.provider.Settings
 object DeviceInfoHelper {
     @JvmStatic
     fun getDeviceId(context: Context): String? {
-        return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID)
+        return Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
     }
 }
