@@ -1,11 +1,11 @@
-package ai.elimu.chat.util;
+package ai.elimu.chat.util
 
-import android.content.Context;
-import android.provider.Settings;
+import android.content.Context
+import android.provider.Settings
 
-public class DeviceInfoHelper {
-
-    public static String getDeviceId(Context context) {
-        return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+object DeviceInfoHelper {
+    @JvmStatic
+    fun getDeviceId(context: Context): String? {
+        return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID)
     }
 }
