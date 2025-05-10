@@ -47,12 +47,12 @@ class MessageListArrayAdapter(context: Context, messages: List<Message>) :
 
         val layoutInflater =
             context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        if (TextUtils.isEmpty(message.studentId) || message.studentId == studentId) {
+        listItem = if (TextUtils.isEmpty(message.studentId) || message.studentId == studentId) {
             // Align message to the left of the screen
-            listItem = layoutInflater.inflate(R.layout.activity_chat_list_item, parent, false)
+            layoutInflater.inflate(R.layout.activity_chat_list_item, parent, false)
         } else {
             // Align message to the right of the screen
-            listItem = layoutInflater.inflate(R.layout.activity_chat_list_item_right, parent, false)
+            layoutInflater.inflate(R.layout.activity_chat_list_item_right, parent, false)
         }
 
 
