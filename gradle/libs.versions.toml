@@ -8,6 +8,8 @@ circleImageView = "3.1.0"
 
 androidXJunit = "1.2.1"
 androidXEspresso = "3.6.1"
+coreKtx = "1.16.0"
+kotlin = "2.1.20"
 
 [libraries]
 elimu-content-provider = { group = "ai.elimu", name = "content-provider", version.ref = "elimuContentProvider" }
@@ -19,5 +21,7 @@ androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "a
 androidx-espresso = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidXEspresso" }
 
 junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 
 [plugins]
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

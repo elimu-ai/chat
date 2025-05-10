@@ -1,3 +1,15 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath libs.green.dao.gradle.plugin
+    }
+}
+
+plugins {
+    alias(libs.plugins.kotlin.android)
+}
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -37,14 +49,8 @@ android {
     lintOptions {
         abortOnError true
     }
-}
-
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath libs.green.dao.gradle.plugin
+    kotlinOptions {
+        jvmTarget = '17'
     }
 }
 
@@ -61,6 +67,7 @@ dependencies {
 
     implementation libs.green.dao
     implementation libs.circle.imageview
+    implementation libs.androidx.core.ktx
 
     testImplementation libs.junit
 
