@@ -15,11 +15,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import java.io.File
 
-class MessageListArrayAdapter(context: Context, messages: MutableList<Message>) :
+class MessageListArrayAdapter(context: Context, messages: List<Message>) :
     ArrayAdapter<Message?>(context, R.layout.activity_chat_list_item, messages) {
     private val context: Context
 
-    private val messages: MutableList<Message>
+    private val messages: List<Message>
 
     private val studentId: String? // Id of current Student using the Device
 
