@@ -1,6 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Forces Views to be right-aligned -->
     <View
@@ -22,7 +23,7 @@
             android:gravity="center_vertical"
             android:padding="@dimen/activity_vertical_margin"
             android:minHeight="?android:attr/listPreferredItemHeightSmall"
-            android:text="Text message" />
+            tools:text="Text message" />
     </LinearLayout>
 
     <ImageView
