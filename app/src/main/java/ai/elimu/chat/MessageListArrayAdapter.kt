@@ -41,7 +41,7 @@ class MessageListArrayAdapter(context: Context, messages: List<Message>) :
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         Log.i(javaClass.getName(), "getView")
 
-        val message = messages.get(position)
+        val message = messages[position]
 
         var listItem: View? = null
 
