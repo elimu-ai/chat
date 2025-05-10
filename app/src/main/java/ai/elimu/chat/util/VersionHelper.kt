@@ -1,23 +1,22 @@
-package ai.elimu.chat.util;
+package ai.elimu.chat.util
 
-import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.util.Log;
+import android.content.Context
+import android.content.pm.PackageManager
+import android.util.Log
 
-public class VersionHelper {
-
+object VersionHelper {
     /**
-     * @return Application's version code from the {@code PackageManager}.
+     * @return Application's version code from the `PackageManager`.
      */
-    public static int getAppVersionCode(Context context) {
-        Log.i(VersionHelper.class.getName(), "getAppVersionCode");
+    fun getAppVersionCode(context: Context): Int {
+        Log.i(VersionHelper::class.java.getName(), "getAppVersionCode")
 
         try {
-            PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-            return packageInfo.versionCode;
-        } catch (PackageManager.NameNotFoundException e) {
-            throw new RuntimeException("Could not get package name: " + e);
+            val packageInfo =
+                context.getPackageManager().getPackageInfo(context.getPackageName(), 0)
+            return packageInfo.versionCode
+        } catch (e: PackageManager.NameNotFoundException) {
+            throw RuntimeException("Could not get package name: " + e)
         }
     }
 }
