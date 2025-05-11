@@ -29,7 +29,7 @@
     <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginLeft="-25dp"
+        android:layout_marginStart="-25dp"
         android:rotation="180"
         android:src="@drawable/shape_triangle" />
 
