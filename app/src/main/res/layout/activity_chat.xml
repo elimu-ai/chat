@@ -51,6 +51,7 @@
             android:background="@drawable/button_custom"
             android:src="@drawable/ic_send_white_24dp"
             android:padding="20dp"
+            android:contentDescription="@string/content_desc_send_button"
             android:scaleType="fitCenter" />
     </LinearLayout>
 </RelativeLayout>

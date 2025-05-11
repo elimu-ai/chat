@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Chat</string>
+    <string name="content_desc_send_button">Send</string>
 </resources>
