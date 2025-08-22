@@ -2,6 +2,7 @@ package ai.elimu.chat
 
 import ai.elimu.chat.model.Message
 import ai.elimu.chat.receiver.StudentUpdateReceiver
+import ai.elimu.chat.util.Constants
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.preference.PreferenceManager
@@ -35,7 +36,7 @@ class MessageListArrayAdapter(context: Context, messages: List<Message>) :
         this.messages = messages
 
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-        studentId = sharedPreferences.getString(StudentUpdateReceiver.PREF_STUDENT_ID, null)
+        studentId = sharedPreferences.getString(Constants.PREF_STUDENT_ID, null)
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {

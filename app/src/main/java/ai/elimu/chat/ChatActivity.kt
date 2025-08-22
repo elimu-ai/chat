@@ -2,7 +2,8 @@ package ai.elimu.chat
 
 import ai.elimu.chat.dao.MessageDao
 import ai.elimu.chat.model.Message
-import ai.elimu.chat.receiver.StudentUpdateReceiver
+import ai.elimu.chat.model.MessageFactory
+import ai.elimu.chat.util.Constants
 import ai.elimu.chat.util.DeviceInfoHelper
 import android.app.Activity
 import android.os.Bundle
@@ -58,7 +59,7 @@ class ChatActivity : Activity() {
         messages = messageDao!!.queryBuilder()
             .where(MessageDao.Properties.TimeSent.gt(calendar24HoursAgo.getTimeInMillis()))
             .list()
-        Log.i(javaClass.getName(), "messages.size(): " + messages!!.size)
+        Log.i(javaClass.getName(), "messages.size(): " + messages.size)
 
         arrayAdapter = MessageListArrayAdapter(applicationContext, messages)
         mListPreviousMessages!!.setAdapter(arrayAdapter)
@@ -109,71 +110,54 @@ class ChatActivity : Activity() {
         mButtonSend!!.setEnabled(false)
         mButtonSend!!.setImageDrawable(getDrawable(R.drawable.ic_send_grey_24dp))
 
-        mButtonSend!!.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(view: View?) {
-                Log.i(javaClass.getName(), "mButtonSend onClick")
+        mButtonSend!!.setOnClickListener {
+            Log.i(javaClass.getName(), "mButtonSend onClick")
 
-                val text = messageText!!.getText().toString()
-                Log.i(javaClass.getName(), "text: $text")
+            val text = messageText!!.getText().toString()
+            Log.i(javaClass.getName(), "text: $text")
 
-                val sharedPreferences =
-                    PreferenceManager.getDefaultSharedPreferences(applicationContext)
+            val sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(applicationContext)
 
-                // Store in database
-                val message = Message()
-                message.deviceId = DeviceInfoHelper.getDeviceId(applicationContext)
-                val studentId =
-                    sharedPreferences.getString(StudentUpdateReceiver.PREF_STUDENT_ID, null)
-                if (!TextUtils.isEmpty(studentId)) {
-                    message.studentId = studentId
-                }
-                val studentAvatar =
-                    sharedPreferences.getString(StudentUpdateReceiver.PREF_STUDENT_AVATAR, null)
-                if (!TextUtils.isEmpty(studentAvatar)) {
-                    message.studentAvatar = studentAvatar
-                }
-                message.timeSent = Calendar.getInstance()
-                message.text = text
-                messageDao!!.insert(message)
-
-                // Add to UI
-                addToMessageListAndRefresh(message)
-
-                // Reset input field
-                messageText!!.setText("")
-
-                val showMessageFromAkili = Math.random() > 0.5
-                if (showMessageFromAkili) {
-                    mButtonSend!!.postDelayed(object : Runnable {
-                        override fun run() {
-                            // Simulate message from AI tutor
-
-                            // Akili
-
-                            val message = Message()
-                            message.studentId = "00000000aaaaaaaa_1"
-                            message.timeSent = Calendar.getInstance()
-                            message.text = randomEmoji
-                            addToMessageListAndRefresh(message)
-                        }
-                    }, (2000 + (Math.random() * 8000).toInt()).toLong())
-                }
-
-                val showMessageFromPenguin = Math.random() > 0.5
-                if (showMessageFromPenguin) {
-                    mButtonSend!!.postDelayed(object : Runnable {
-                        override fun run() {
-                            // Penguin
-                            val messagePenguin = Message()
-                            messagePenguin.studentId = "00000000aaaaaaaa_2"
-                            messagePenguin.timeSent = Calendar.getInstance()
-                            messagePenguin.text = randomEmoji
-                            addToMessageListAndRefresh(messagePenguin)
-                        }
-                    }, (2000 + (Math.random() * 8000).toInt()).toLong())
-                }
+            // Store in database
+            val message = Message()
+            message.deviceId = DeviceInfoHelper.getDeviceId(applicationContext)
+            val studentId =
+                sharedPreferences.getString(Constants.PREF_STUDENT_ID, null)
+            if (!TextUtils.isEmpty(studentId)) {
+                message.studentId = studentId
             }
-        })
+            val studentAvatar =
+                sharedPreferences.getString(Constants.PREF_STUDENT_AVATAR, null)
+            if (!TextUtils.isEmpty(studentAvatar)) {
+                message.studentAvatar = studentAvatar
+            }
+            message.timeSent = Calendar.getInstance()
+            message.text = text
+            messageDao!!.insert(message)
+
+            // Add to UI
+            addToMessageListAndRefresh(message)
+
+            // Reset input field
+            messageText!!.setText("")
+
+            val showMessageFromAkili = Math.random() > 0.5
+            if (showMessageFromAkili) {
+                mButtonSend!!.postDelayed({ // Simulate message from AI tutor
+                    val akiliMessage = MessageFactory.generateEmojiMessage("00000000aaaaaaaa_1")
+                    addToMessageListAndRefresh(akiliMessage)
+                }, (2000 + (Math.random() * 8000).toInt()).toLong())
+            }
+
+            val showMessageFromPenguin = Math.random() > 0.5
+            if (showMessageFromPenguin) {
+                mButtonSend!!.postDelayed({ // Penguin
+                    val penguinMessage = MessageFactory.generateEmojiMessage("00000000aaaaaaaa_2")
+                    addToMessageListAndRefresh(penguinMessage)
+                }, (2000 + (Math.random() * 8000).toInt()).toLong())
+            }
+        }
     }
 
     private fun addToMessageListAndRefresh(message: Message) {
@@ -188,115 +172,9 @@ class ChatActivity : Activity() {
         arrayAdapter!!.notifyDataSetChanged()
         mListPreviousMessages!!.smoothScrollToPosition(mListPreviousMessages!!.count)
         // Fix problem with scrolling when keyboard is present
-        mListPreviousMessages!!.postDelayed(object : Runnable {
-            override fun run() {
-                Log.i(javaClass.getName(), "mListPreviousMessages.postDelayed")
-                mListPreviousMessages!!.setSelection(mListPreviousMessages!!.count)
-            }
+        mListPreviousMessages!!.postDelayed({
+            Log.i(javaClass.getName(), "mListPreviousMessages.postDelayed")
+            mListPreviousMessages!!.setSelection(mListPreviousMessages!!.count)
         }, 100)
-    }
-
-    private val randomEmoji: String
-        get() {
-            val unicodes = intArrayOf(
-                // Emoticons
-                0x1F601,
-                0x1F602,
-                0x1F603,
-                0x1F604,
-                0x1F605,
-                0x1F606,
-                0x1F609,
-                0x1F60A,
-                0x1F60B,
-                0x1F60C,
-                0x1F60D,
-                0x1F60F,
-                0x1F612,
-                0x1F613,
-                0x1F614,
-                0x1F616,
-                0x1F618,
-                0x1F61A,
-                0x1F61C,
-                0x1F61D,
-                0x1F61E,
-                0x1F620,
-                0x1F621,
-                0x1F622,
-                0x1F623,
-                0x1F624,
-                0x1F625,
-                0x1F628,
-                0x1F629,
-                0x1F62A,
-                0x1F62B,
-                0x1F62D,
-                0x1F630,
-                0x1F631,
-                0x1F632,
-                0x1F633,
-                0x1F635,
-                0x1F637,
-                0x1F638,
-                0x1F639,
-                0x1F63A,
-                0x1F63B,
-                0x1F63C,
-                0x1F63D,
-                0x1F63E,
-                0x1F63F,
-                0x1F640,
-                0x1F645,
-                0x1F646,
-                0x1F647,
-                0x1F648,
-                0x1F649,
-                0x1F64A,
-                0x1F64B,
-                0x1F64C,
-                0x1F64D,
-                0x1F64E,
-                0x1F64F,  // Uncategorized
-
-                0x1F40C,
-                0x1F40D,
-                0x1F40E,
-                0x1F411,
-                0x1F412,
-                0x1F414,
-                0x1F418,
-                0x1F419,
-                0x1F41A,
-                0x1F41B,
-                0x1F41C,
-                0x1F41D,
-                0x1F41E,
-                0x1F41F,
-                0x1F420,
-                0x1F421,
-                0x1F422,
-                0x1F423,
-                0x1F424,
-                0x1F425,
-                0x1F426,
-                0x1F427,
-                0x1F428,
-            )
-            val randomIndex = (Math.random() * unicodes.size).toInt()
-            val unicode = unicodes[randomIndex]
-            Log.d(javaClass.getName(), "unicode: $unicode")
-            val emoji = getEmijoByUnicode(unicode)
-            Log.i(javaClass.getName(), "emoji: $emoji")
-            return emoji
-        }
-
-    /**
-     * See http://apps.timwhitlock.info/emoji/tables/unicode
-     * @param unicode Example: "U+1F601" --> "0x1F601"
-     * @return
-     */
-    private fun getEmijoByUnicode(unicode: Int): String {
-        return String(Character.toChars(unicode))
     }
 }
