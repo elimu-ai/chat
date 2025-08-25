@@ -3,12 +3,15 @@ package ai.elimu.chat
 import ai.elimu.chat.dao.DaoMaster
 import ai.elimu.chat.dao.DaoMaster.DevOpenHelper
 import ai.elimu.chat.dao.DaoSession
+import ai.elimu.chat.util.Constants
 import ai.elimu.chat.util.VersionHelper
 import android.app.Application
 import android.preference.PreferenceManager
 import android.util.Log
 import androidx.core.content.edit
+import dagger.hilt.android.HiltAndroidApp
 
+@HiltAndroidApp
 class ChatApplication : Application() {
     var daoSession: DaoSession? = null
         private set
@@ -24,10 +27,10 @@ class ChatApplication : Application() {
         // Check if the application's versionCode was upgraded
         val sharedPreferences =
             PreferenceManager.getDefaultSharedPreferences(applicationContext)
-        var oldVersionCode = sharedPreferences.getInt(PREF_APP_VERSION_CODE, 0)
+        var oldVersionCode = sharedPreferences.getInt(Constants.PREF_APP_VERSION_CODE, 0)
         val newVersionCode = VersionHelper.getAppVersionCode(applicationContext)
         if (oldVersionCode == 0) {
-            sharedPreferences.edit(commit = true) { putInt(PREF_APP_VERSION_CODE, newVersionCode) }
+            sharedPreferences.edit(commit = true) { putInt(Constants.PREF_APP_VERSION_CODE, newVersionCode) }
             oldVersionCode = newVersionCode
         }
         if (oldVersionCode < newVersionCode) {
@@ -38,11 +41,7 @@ class ChatApplication : Application() {
             //            if (newVersionCode == ???) {
 //                // Put relevant tasks required for upgrading here
 //            }
-            sharedPreferences.edit(commit = true) { putInt(PREF_APP_VERSION_CODE, newVersionCode) }
+            sharedPreferences.edit(commit = true) { putInt(Constants.PREF_APP_VERSION_CODE, newVersionCode) }
         }
-    }
-
-    companion object {
-        const val PREF_APP_VERSION_CODE: String = "pref_app_version_code"
     }
 }

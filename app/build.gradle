@@ -9,6 +9,8 @@ buildscript {
 
 plugins {
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.dagger.hilt.android)
 }
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -69,10 +71,20 @@ dependencies {
     implementation libs.circle.imageview
     implementation libs.androidx.core.ktx
 
+    implementation libs.room.runtime
+    implementation libs.room.ktx
+    kapt libs.room.compiler
+
+    implementation libs.hilt.android
+    kapt libs.hilt.android.compiler
+
+    implementation 'com.squareup:javapoet:1.13.0'
+
     testImplementation libs.junit
 
     androidTestImplementation libs.androidx.junit
     androidTestImplementation libs.androidx.espresso
+
 }
 
 publishing {

@@ -1,11 +1,13 @@
 package ai.elimu.chat
 
 import ai.elimu.chat.dao.MessageDao
+import ai.elimu.chat.data.local.ChatMessageDao
+import ai.elimu.chat.data.local.toEntity
+import ai.elimu.chat.data.local.toMessage
 import ai.elimu.chat.model.Message
 import ai.elimu.chat.model.MessageFactory
 import ai.elimu.chat.util.Constants
 import ai.elimu.chat.util.DeviceInfoHelper
-import android.app.Activity
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.text.Editable
@@ -17,10 +19,20 @@ import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ListView
+import androidx.activity.ComponentActivity
+import androidx.lifecycle.lifecycleScope
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.util.Calendar
+import javax.inject.Inject
 
-class ChatActivity : Activity() {
-    private var messageDao: MessageDao? = null
+@AndroidEntryPoint
+class ChatActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var chatMessageDao: ChatMessageDao
+
+    // private var messageDao: MessageDao? = null
 
     private var messages: MutableList<Message> = mutableListOf()
 
@@ -38,7 +50,7 @@ class ChatActivity : Activity() {
 
         setContentView(R.layout.activity_chat)
 
-        messageDao = (application as ChatApplication).daoSession!!.messageDao
+       // messageDao = (application as ChatApplication).daoSession!!.messageDao
 
         mListPreviousMessages = findViewById<View?>(R.id.listPreviousMessages) as ListView
         messageText = findViewById<View?>(R.id.message) as EditText
@@ -54,15 +66,25 @@ class ChatActivity : Activity() {
 //        Log.i(getClass().getName(), "letters: " + letters);
 
         // Load messages sent within the last 24 hours
-        val calendar24HoursAgo = Calendar.getInstance()
+/*        val calendar24HoursAgo = Calendar.getInstance()
         calendar24HoursAgo.add(Calendar.HOUR_OF_DAY, -24)
         messages = messageDao!!.queryBuilder()
             .where(MessageDao.Properties.TimeSent.gt(calendar24HoursAgo.getTimeInMillis()))
             .list()
-        Log.i(javaClass.getName(), "messages.size(): " + messages.size)
+        Log.i(javaClass.getName(), "messages.size(): " + messages.size)*/
 
         arrayAdapter = MessageListArrayAdapter(applicationContext, messages)
         mListPreviousMessages!!.setAdapter(arrayAdapter)
+
+        lifecycleScope.launch {
+            val calendar24HoursAgo = Calendar.getInstance()
+            calendar24HoursAgo.add(Calendar.HOUR_OF_DAY, -24)
+            val newMessages =
+                chatMessageDao.getMessages(timeStamp = calendar24HoursAgo.timeInMillis)
+           val uiMessages =  newMessages.map { it.toMessage() }
+            messages.addAll(uiMessages)
+            refreshMessageList()
+        }
 
         messageText!!.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence?, i: Int, i1: Int, i2: Int) {
@@ -134,7 +156,11 @@ class ChatActivity : Activity() {
             }
             message.timeSent = Calendar.getInstance()
             message.text = text
-            messageDao!!.insert(message)
+
+            lifecycleScope.launch {
+                chatMessageDao.insert(message.toEntity())
+            }
+          //  messageDao!!.insert(message)
 
             // Add to UI
             addToMessageListAndRefresh(message)

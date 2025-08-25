@@ -4,6 +4,8 @@ import android.util.Log
 
 object Constants {
 
+    val PREF_APP_VERSION_CODE: String = "pref_app_version_code"
+
     val PREF_STUDENT_ID: String = "pref_student_id"
 
     val PREF_STUDENT_AVATAR: String = "pref_student_avatar"
