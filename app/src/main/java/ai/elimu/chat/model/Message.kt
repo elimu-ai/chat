@@ -1,6 +1,6 @@
 package ai.elimu.chat.model
 
-import ai.elimu.chat.util.getRandomEmoji
+import ai.elimu.chat.util.Constants.EMOJI_UNICODES
 import java.util.Calendar
 
 data class Message(
@@ -31,4 +31,17 @@ fun generateEmojiMessage(studentId: String): Message {
     message.studentId(studentId)
     message.message(getRandomEmoji())
     return message.build()
+}
+
+private fun getRandomEmoji(): String {
+    val randomIndex = (Math.random() * EMOJI_UNICODES.size).toInt()
+    val unicode = EMOJI_UNICODES[randomIndex]
+
+    /**
+     * See http://apps.timwhitlock.info/emoji/tables/unicode
+     * @param unicode Example: "U+1F601" --> "0x1F601"
+     * @return
+     */
+    val emoji = String(Character.toChars(unicode))
+    return emoji
 }
