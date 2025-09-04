@@ -43,7 +43,7 @@ class MessageListArrayAdapter(context: Context, messages: List<Message>) :
 
         val message = messages[position]
 
-        var listItem: View? = null
+        var listItem: View?
 
         val layoutInflater =
             context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater

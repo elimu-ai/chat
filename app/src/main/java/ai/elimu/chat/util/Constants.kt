@@ -1,20 +1,18 @@
 package ai.elimu.chat.util
 
-import android.util.Log
-
 object Constants {
 
-    val PREF_FILE_NAME: String = "pref_app_001"
+    const val PREF_FILE_NAME: String = "pref_app_001"
 
-    val PREF_APP_VERSION_CODE: String = "pref_app_version_code"
+    const val PREF_APP_VERSION_CODE: String = "pref_app_version_code"
 
-    val PREF_STUDENT_ID: String = "pref_student_id"
+    const val PREF_STUDENT_ID: String = "pref_student_id"
 
-    val PREF_STUDENT_AVATAR: String = "pref_student_avatar"
+    const val PREF_STUDENT_AVATAR: String = "pref_student_avatar"
 
-    val STUDENTID_AKILI = "00000000aaaaaaaa_1"
+    const val STUDENTID_AKILI = "00000000aaaaaaaa_1"
 
-    val STUDENTID_PENGUIN = "00000000aaaaaaaa_2"
+    const val STUDENTID_PENGUIN = "00000000aaaaaaaa_2"
 
     val EMOJI_UNICODES = intArrayOf(
         // Emoticons

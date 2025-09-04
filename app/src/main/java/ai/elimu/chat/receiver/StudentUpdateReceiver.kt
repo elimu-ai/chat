@@ -23,8 +23,8 @@ class StudentUpdateReceiver : BroadcastReceiver() {
         if (!TextUtils.isEmpty(studentId)) {
             val existingStudentId = sharedPreferences.getString(Constants.PREF_STUDENT_ID, null)
             Log.i(javaClass.getName(), "existingStudentId: $existingStudentId")
-            if (TextUtils.isEmpty(existingStudentId)) {
-                /*                // Update previously sent messages on the current device // TODO: Migrate to room
+            /*  if (TextUtils.isEmpty(existingStudentId)) {
+                              // Update previously sent messages on the current device // TODO: Migrate to room
                                 val chatApplication = context.applicationContext as ChatApplication
                                 val messageDao = chatApplication.daoSession!!.messageDao
                                 val existingMessages = messageDao.queryBuilder()
@@ -38,8 +38,8 @@ class StudentUpdateReceiver : BroadcastReceiver() {
                                     message.studentId = studentId
                                     message.studentAvatar = studentAvatar
                                     messageDao.update(message)
-                                }*/
-            }
+                                }
+            }*/
 
             sharedPreferences.edit(commit = true) {
                 putString(
