@@ -1,8 +1,6 @@
 package ai.elimu.chat
 
-import ai.elimu.chat.dao.DaoMaster
-import ai.elimu.chat.dao.DaoMaster.DevOpenHelper
-import ai.elimu.chat.dao.DaoSession
+
 import ai.elimu.chat.di.ServiceLocator
 import ai.elimu.chat.util.Constants
 import ai.elimu.chat.util.VersionHelper
@@ -13,17 +11,12 @@ import androidx.core.content.edit
 
 //@HiltAndroidApp
 class ChatApplication : Application() {
-    var daoSession: DaoSession? = null
-        private set
+
 
     override fun onCreate() {
         Log.i(javaClass.getName(), "onCreate")
         super.onCreate()
         ServiceLocator.initialize(this)
-
-        val helper = DevOpenHelper(this, "chat-db")
-        val db = helper.writableDb
-        daoSession = DaoMaster(db).newSession()
 
         // Check if the application's versionCode was upgraded
         val sharedPreferences =

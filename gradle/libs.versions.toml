@@ -3,8 +3,6 @@ elimuContentProvider = "1.4.50"
 agp = "8.6.0"
 javapoet = "1.13.0"
 junit = "4.13.2"
-greenDao = "3.3.0"
-greenDaoGradlePlugin = "3.3.1"
 circleImageView = "3.1.0"
 
 androidXJunit = "1.2.1"
@@ -17,8 +15,6 @@ hilt = "2.57.1"
 
 [libraries]
 elimu-content-provider = { group = "ai.elimu", name = "content-provider", version.ref = "elimuContentProvider" }
-green-dao = { group = "org.greenrobot", name = "greendao", version.ref = "greenDao" }
-green-dao-gradle-plugin = { group = "org.greenrobot", name = "greendao-gradle-plugin", version.ref = "greenDaoGradlePlugin" }
 circle-imageview = { group = "de.hdodenhof", name = "circleimageview", version.ref = "circleImageView" }
 agp = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidXJunit" }

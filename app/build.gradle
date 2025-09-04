@@ -2,9 +2,6 @@ buildscript {
     repositories {
         mavenCentral()
     }
-    dependencies {
-        classpath libs.green.dao.gradle.plugin
-    }
 }
 
 plugins {
@@ -16,7 +13,6 @@ import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 apply plugin: 'com.android.application'
-apply plugin: 'org.greenrobot.greendao'
 apply plugin: 'maven-publish'
 
 android {
@@ -56,18 +52,11 @@ android {
     }
 }
 
-greendao {
-    schemaVersion android.defaultConfig.versionCode
-    targetGenDir = new File('app/src/main/java')
-    daoPackage = android.defaultConfig.applicationId + '.dao'
-}
-
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation libs.elimu.content.provider // https://jitpack.io/#ai.elimu/content-provider
 
-    implementation libs.green.dao
     implementation libs.circle.imageview
     implementation libs.androidx.core.ktx
     implementation libs.androidx.activity.ktx

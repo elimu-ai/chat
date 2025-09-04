@@ -1,14 +1,13 @@
 package ai.elimu.chat
 
-import ai.elimu.chat.dao.MessageDao
 import ai.elimu.chat.data.local.ChatMessageDao
 import ai.elimu.chat.data.local.toEntity
 import ai.elimu.chat.data.local.toMessage
 import ai.elimu.chat.di.ServiceLocator
 import ai.elimu.chat.model.Message
-import ai.elimu.chat.model.MessageFactory
+import ai.elimu.chat.model.MessageBuilder
+import ai.elimu.chat.model.generateEmojiMessage
 import ai.elimu.chat.util.Constants
-import ai.elimu.chat.util.DeviceInfoHelper
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.text.Editable
@@ -143,20 +142,23 @@ class ChatActivity : ComponentActivity() {
                 PreferenceManager.getDefaultSharedPreferences(applicationContext)
 
             // Store in database
-            val message = Message()
-            message.deviceId = DeviceInfoHelper.getDeviceId(applicationContext)
+            val messageBuilder = MessageBuilder()
+            messageBuilder.deviceId(ServiceLocator.provideDeviceId())
             val studentId =
                 sharedPreferences.getString(Constants.PREF_STUDENT_ID, null)
-            if (!TextUtils.isEmpty(studentId)) {
-                message.studentId = studentId
+            studentId?.let {
+                messageBuilder.studentId(it)
             }
+
             val studentAvatar =
                 sharedPreferences.getString(Constants.PREF_STUDENT_AVATAR, null)
-            if (!TextUtils.isEmpty(studentAvatar)) {
-                message.studentAvatar = studentAvatar
+            studentAvatar?.let {
+                messageBuilder.studentAvatar(it)
             }
-            message.timeSent = Calendar.getInstance()
-            message.text = text
+
+            messageBuilder.message(text)
+
+            val message = messageBuilder.build()
 
             lifecycleScope.launch {
                 chatMessageDao.insert(message.toEntity())
@@ -172,7 +174,7 @@ class ChatActivity : ComponentActivity() {
             val showMessageFromAkili = Math.random() > 0.5
             if (showMessageFromAkili) {
                 mButtonSend!!.postDelayed({ // Simulate message from AI tutor
-                    val akiliMessage = MessageFactory.generateEmojiMessage("00000000aaaaaaaa_1")
+                    val akiliMessage = generateEmojiMessage("00000000aaaaaaaa_1")
                     addToMessageListAndRefresh(akiliMessage)
                 }, (2000 + (Math.random() * 8000).toInt()).toLong())
             }
@@ -180,7 +182,7 @@ class ChatActivity : ComponentActivity() {
             val showMessageFromPenguin = Math.random() > 0.5
             if (showMessageFromPenguin) {
                 mButtonSend!!.postDelayed({ // Penguin
-                    val penguinMessage = MessageFactory.generateEmojiMessage("00000000aaaaaaaa_2")
+                    val penguinMessage = generateEmojiMessage("00000000aaaaaaaa_2")
                     addToMessageListAndRefresh(penguinMessage)
                 }, (2000 + (Math.random() * 8000).toInt()).toLong())
             }

@@ -1,95 +1,34 @@
-package ai.elimu.chat.model;
+package ai.elimu.chat.model
 
-import org.greenrobot.greendao.annotation.Convert;
-import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Generated;
-import org.greenrobot.greendao.annotation.Id;
-import org.greenrobot.greendao.annotation.NotNull;
-import ai.elimu.chat.dao.converter.CalendarConverter;
+import ai.elimu.chat.util.getRandomEmoji
+import java.util.Calendar
 
-import java.util.Calendar;
+data class Message(
+    val id: Long, val deviceId: String, val studentId: String?, val studentAvatar: String?,
+    val timeSent: Calendar, val text: String
+)
 
-@Entity
-public class Message {
+class MessageBuilder {
+    private var id: Long = 0
+    private var deviceId: String = ""
+    private var studentId: String? = null
+    private var studentAvatar: String? = null
+    private var timeSent: Calendar = Calendar.getInstance()
+    private var text: String = ""
 
-    @Id(autoincrement = true)
-    private Long id;
+    fun id(id: Long) = apply { this.id = id }
+    fun deviceId(deviceId: String) = apply { this.deviceId = deviceId }
+    fun studentId(studentId: String?) = apply { this.studentId = studentId }
+    fun studentAvatar(studentAvatar: String?) = apply { this.studentAvatar = studentAvatar }
+    fun timeSent(timesent: Calendar) = apply { this.timeSent = timesent }
+    fun message(text: String) = apply { this.text = text }
 
-    @NotNull
-    private String deviceId;
+    fun build() = Message(id, deviceId, studentId, studentAvatar, timeSent, text)
+}
 
-    private String studentId;
-
-    private String studentAvatar;
-
-    @NotNull
-    @Convert(converter = CalendarConverter.class, columnType = Long.class)
-    private Calendar timeSent;
-
-    @NotNull
-    private String text;
-
-    @Generated(hash = 449884345)
-    public Message(Long id, @NotNull String deviceId, String studentId,
-            String studentAvatar, @NotNull Calendar timeSent,
-            @NotNull String text) {
-        this.id = id;
-        this.deviceId = deviceId;
-        this.studentId = studentId;
-        this.studentAvatar = studentAvatar;
-        this.timeSent = timeSent;
-        this.text = text;
-    }
-
-    @Generated(hash = 637306882)
-    public Message() {
-    }
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getDeviceId() {
-        return this.deviceId;
-    }
-
-    public void setDeviceId(String deviceId) {
-        this.deviceId = deviceId;
-    }
-
-    public String getStudentId() {
-        return this.studentId;
-    }
-
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
-    }
-
-    public String getStudentAvatar() {
-        return this.studentAvatar;
-    }
-
-    public void setStudentAvatar(String studentAvatar) {
-        this.studentAvatar = studentAvatar;
-    }
-
-    public Calendar getTimeSent() {
-        return this.timeSent;
-    }
-
-    public void setTimeSent(Calendar timeSent) {
-        this.timeSent = timeSent;
-    }
-
-    public String getText() {
-        return this.text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
+fun generateEmojiMessage(studentId: String): Message {
+    val message = MessageBuilder()
+    message.studentId(studentId)
+    message.message(getRandomEmoji())
+    return message.build()
 }

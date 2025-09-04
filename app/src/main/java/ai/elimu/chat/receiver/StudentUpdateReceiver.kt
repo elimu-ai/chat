@@ -1,9 +1,7 @@
 package ai.elimu.chat.receiver
 
 import ai.elimu.chat.ChatApplication
-import ai.elimu.chat.dao.MessageDao
 import ai.elimu.chat.util.Constants
-import ai.elimu.chat.util.DeviceInfoHelper.getDeviceId
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -27,7 +25,7 @@ class StudentUpdateReceiver : BroadcastReceiver() {
             val existingStudentId = sharedPreferences.getString(Constants.PREF_STUDENT_ID, null)
             Log.i(javaClass.getName(), "existingStudentId: $existingStudentId")
             if (TextUtils.isEmpty(existingStudentId)) {
-                // Update previously sent messages on the current device
+/*                // Update previously sent messages on the current device // TODO: Migrate to room
                 val chatApplication = context.applicationContext as ChatApplication
                 val messageDao = chatApplication.daoSession!!.messageDao
                 val existingMessages = messageDao.queryBuilder()
@@ -41,7 +39,7 @@ class StudentUpdateReceiver : BroadcastReceiver() {
                     message.studentId = studentId
                     message.studentAvatar = studentAvatar
                     messageDao.update(message)
-                }
+                }*/
             }
 
             sharedPreferences.edit(commit = true) { putString(Constants.PREF_STUDENT_ID, studentId) }
