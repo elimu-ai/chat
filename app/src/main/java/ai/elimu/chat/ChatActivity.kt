@@ -19,17 +19,15 @@ import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ListView
-import androidx.activity.ComponentActivity
+import androidx.core.app.ComponentActivity
 import androidx.lifecycle.lifecycleScope
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.util.Calendar
-import javax.inject.Inject
 
-@AndroidEntryPoint
+//@AndroidEntryPoint
 class ChatActivity : ComponentActivity() {
 
-    @Inject
+   // @Inject
     lateinit var chatMessageDao: ChatMessageDao
 
     // private var messageDao: MessageDao? = null

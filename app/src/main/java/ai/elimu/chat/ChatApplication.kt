@@ -9,9 +9,8 @@ import android.app.Application
 import android.preference.PreferenceManager
 import android.util.Log
 import androidx.core.content.edit
-import dagger.hilt.android.HiltAndroidApp
 
-@HiltAndroidApp
+//@HiltAndroidApp
 class ChatApplication : Application() {
     var daoSession: DaoSession? = null
         private set
