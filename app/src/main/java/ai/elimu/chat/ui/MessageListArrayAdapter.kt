@@ -1,5 +1,6 @@
-package ai.elimu.chat
+package ai.elimu.chat.ui
 
+import ai.elimu.chat.R
 import ai.elimu.chat.di.ServiceLocator
 import ai.elimu.chat.model.Message
 import ai.elimu.chat.util.Constants

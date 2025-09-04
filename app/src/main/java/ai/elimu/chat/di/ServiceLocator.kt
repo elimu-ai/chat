@@ -2,6 +2,7 @@ package ai.elimu.chat.di
 
 import ai.elimu.chat.data.local.AppDatabase
 import ai.elimu.chat.data.local.ChatMessageDao
+import ai.elimu.chat.util.Constants
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
@@ -25,9 +26,10 @@ object ServiceLocator {
         ).build()
         chatMessageDao = db.messageDao()
 
+        //TODO: Need to change this
         deviceId = Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
 
-        sharedPreferences = context.getSharedPreferences("your_pref_name", Context.MODE_PRIVATE)
+        sharedPreferences = context.getSharedPreferences(Constants.PREF_FILE_NAME, Context.MODE_PRIVATE)
     }
 
     fun provideChatMessageDao(): ChatMessageDao {
