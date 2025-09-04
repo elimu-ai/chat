@@ -8,9 +8,7 @@ import android.app.Application
 import android.util.Log
 import androidx.core.content.edit
 
-//@HiltAndroidApp
 class ChatApplication : Application() {
-
 
     override fun onCreate() {
         Log.i(javaClass.getName(), "onCreate")

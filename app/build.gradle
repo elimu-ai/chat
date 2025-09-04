@@ -7,7 +7,6 @@ buildscript {
 plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.kapt)
-    //alias(libs.plugins.dagger.hilt.android)
 }
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -64,9 +63,6 @@ dependencies {
     implementation libs.room.runtime
     implementation libs.room.ktx
     kapt libs.room.compiler
-
-    //implementation libs.hilt.android
-   // kapt libs.hilt.android.compiler
 
     implementation libs.javapoet
 

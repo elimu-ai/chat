@@ -4,8 +4,12 @@ import ai.elimu.chat.util.Constants.EMOJI_UNICODES
 import java.util.Calendar
 
 data class Message(
-    val id: Long, val deviceId: String, val studentId: String?, val studentAvatar: String?,
-    val timeSent: Calendar, val text: String
+    val id: Long,
+    val deviceId: String,
+    val studentId: String?,
+    val studentAvatar: String?,
+    val timeSent: Calendar,
+    val text: String
 )
 
 class MessageBuilder {

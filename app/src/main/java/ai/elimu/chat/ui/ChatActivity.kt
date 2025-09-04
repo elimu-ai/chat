@@ -3,6 +3,7 @@ package ai.elimu.chat.ui
 import ai.elimu.chat.R
 import ai.elimu.chat.model.Message
 import ai.elimu.chat.util.Constants
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
@@ -17,6 +18,7 @@ import androidx.core.app.ComponentActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 
+@SuppressLint("RestrictedApi")
 class ChatActivity : ComponentActivity() {
 
     private var messages: MutableList<Message> = mutableListOf()
