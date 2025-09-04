@@ -1,11 +1,10 @@
 package ai.elimu.chat.receiver
 
-import ai.elimu.chat.ChatApplication
+import ai.elimu.chat.di.ServiceLocator
 import ai.elimu.chat.util.Constants
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.preference.PreferenceManager
 import android.text.TextUtils
 import android.util.Log
 import androidx.core.content.edit
@@ -19,34 +18,44 @@ class StudentUpdateReceiver : BroadcastReceiver() {
         val studentAvatar = intent.getStringExtra(EXTRA_STUDENT_AVATAR)
         Log.i(javaClass.getName(), "studentAvatar: $studentAvatar")
 
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val sharedPreferences = ServiceLocator.provideSharedPreference()
 
         if (!TextUtils.isEmpty(studentId)) {
             val existingStudentId = sharedPreferences.getString(Constants.PREF_STUDENT_ID, null)
             Log.i(javaClass.getName(), "existingStudentId: $existingStudentId")
             if (TextUtils.isEmpty(existingStudentId)) {
-/*                // Update previously sent messages on the current device // TODO: Migrate to room
-                val chatApplication = context.applicationContext as ChatApplication
-                val messageDao = chatApplication.daoSession!!.messageDao
-                val existingMessages = messageDao.queryBuilder()
-                    .where(
-                        MessageDao.Properties.DeviceId.eq(getDeviceId(context)),
-                        MessageDao.Properties.StudentId.isNull()
-                    )
-                    .list()
-                Log.i(javaClass.getName(), "existingMessages.size(): " + existingMessages.size)
-                for (message in existingMessages) {
-                    message.studentId = studentId
-                    message.studentAvatar = studentAvatar
-                    messageDao.update(message)
-                }*/
+                /*                // Update previously sent messages on the current device // TODO: Migrate to room
+                                val chatApplication = context.applicationContext as ChatApplication
+                                val messageDao = chatApplication.daoSession!!.messageDao
+                                val existingMessages = messageDao.queryBuilder()
+                                    .where(
+                                        MessageDao.Properties.DeviceId.eq(getDeviceId(context)),
+                                        MessageDao.Properties.StudentId.isNull()
+                                    )
+                                    .list()
+                                Log.i(javaClass.getName(), "existingMessages.size(): " + existingMessages.size)
+                                for (message in existingMessages) {
+                                    message.studentId = studentId
+                                    message.studentAvatar = studentAvatar
+                                    messageDao.update(message)
+                                }*/
             }
 
-            sharedPreferences.edit(commit = true) { putString(Constants.PREF_STUDENT_ID, studentId) }
+            sharedPreferences.edit(commit = true) {
+                putString(
+                    Constants.PREF_STUDENT_ID,
+                    studentId
+                )
+            }
         }
 
         if (!TextUtils.isEmpty(studentAvatar)) {
-            sharedPreferences.edit(commit = true) { putString(Constants.PREF_STUDENT_AVATAR, studentAvatar) }
+            sharedPreferences.edit(commit = true) {
+                putString(
+                    Constants.PREF_STUDENT_AVATAR,
+                    studentAvatar
+                )
+            }
         }
     }
 

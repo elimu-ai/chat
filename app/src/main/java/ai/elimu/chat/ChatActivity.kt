@@ -8,8 +8,8 @@ import ai.elimu.chat.model.Message
 import ai.elimu.chat.model.MessageBuilder
 import ai.elimu.chat.model.generateEmojiMessage
 import ai.elimu.chat.util.Constants
+import android.content.SharedPreferences
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -27,10 +27,10 @@ import java.util.Calendar
 //@AndroidEntryPoint
 class ChatActivity : ComponentActivity() {
 
-   // @Inject
+    // @Inject
     lateinit var chatMessageDao: ChatMessageDao
 
-    // private var messageDao: MessageDao? = null
+    lateinit var sharedPreferences: SharedPreferences
 
     private var messages: MutableList<Message> = mutableListOf()
 
@@ -49,8 +49,7 @@ class ChatActivity : ComponentActivity() {
         setContentView(R.layout.activity_chat)
         chatMessageDao = ServiceLocator.provideChatMessageDao()
 
-
-        // messageDao = (application as ChatApplication).daoSession!!.messageDao
+        sharedPreferences = ServiceLocator.provideSharedPreference()
 
         mListPreviousMessages = findViewById<View?>(R.id.listPreviousMessages) as ListView
         messageText = findViewById<View?>(R.id.message) as EditText
@@ -66,12 +65,12 @@ class ChatActivity : ComponentActivity() {
 //        Log.i(getClass().getName(), "letters: " + letters);
 
         // Load messages sent within the last 24 hours
-/*        val calendar24HoursAgo = Calendar.getInstance()
-        calendar24HoursAgo.add(Calendar.HOUR_OF_DAY, -24)
-        messages = messageDao!!.queryBuilder()
-            .where(MessageDao.Properties.TimeSent.gt(calendar24HoursAgo.getTimeInMillis()))
-            .list()
-        Log.i(javaClass.getName(), "messages.size(): " + messages.size)*/
+        /*        val calendar24HoursAgo = Calendar.getInstance()
+                calendar24HoursAgo.add(Calendar.HOUR_OF_DAY, -24)
+                messages = messageDao!!.queryBuilder()
+                    .where(MessageDao.Properties.TimeSent.gt(calendar24HoursAgo.getTimeInMillis()))
+                    .list()
+                Log.i(javaClass.getName(), "messages.size(): " + messages.size)*/
 
         arrayAdapter = MessageListArrayAdapter(applicationContext, messages)
         mListPreviousMessages!!.setAdapter(arrayAdapter)
@@ -81,7 +80,7 @@ class ChatActivity : ComponentActivity() {
             calendar24HoursAgo.add(Calendar.HOUR_OF_DAY, -24)
             val newMessages =
                 chatMessageDao.getMessages(timeStamp = calendar24HoursAgo.timeInMillis)
-           val uiMessages =  newMessages.map { it.toMessage() }
+            val uiMessages = newMessages.map { it.toMessage() }
             messages.addAll(uiMessages)
             refreshMessageList()
         }
@@ -138,9 +137,6 @@ class ChatActivity : ComponentActivity() {
             val text = messageText!!.getText().toString()
             Log.i(javaClass.getName(), "text: $text")
 
-            val sharedPreferences =
-                PreferenceManager.getDefaultSharedPreferences(applicationContext)
-
             // Store in database
             val messageBuilder = MessageBuilder()
             messageBuilder.deviceId(ServiceLocator.provideDeviceId())
@@ -163,7 +159,7 @@ class ChatActivity : ComponentActivity() {
             lifecycleScope.launch {
                 chatMessageDao.insert(message.toEntity())
             }
-          //  messageDao!!.insert(message)
+            //  messageDao!!.insert(message)
 
             // Add to UI
             addToMessageListAndRefresh(message)

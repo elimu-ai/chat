@@ -1,10 +1,10 @@
 package ai.elimu.chat
 
+import ai.elimu.chat.di.ServiceLocator
 import ai.elimu.chat.model.Message
 import ai.elimu.chat.util.Constants
 import android.content.Context
 import android.graphics.BitmapFactory
-import android.preference.PreferenceManager
 import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
@@ -34,8 +34,7 @@ class MessageListArrayAdapter(context: Context, messages: List<Message>) :
         this.context = context
         this.messages = messages
 
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-        studentId = sharedPreferences.getString(Constants.PREF_STUDENT_ID, null)
+        studentId = ServiceLocator.provideSharedPreference().getString(Constants.PREF_STUDENT_ID, null)
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
