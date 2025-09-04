@@ -4,6 +4,7 @@ import ai.elimu.chat.dao.MessageDao
 import ai.elimu.chat.data.local.ChatMessageDao
 import ai.elimu.chat.data.local.toEntity
 import ai.elimu.chat.data.local.toMessage
+import ai.elimu.chat.di.ServiceLocator
 import ai.elimu.chat.model.Message
 import ai.elimu.chat.model.MessageFactory
 import ai.elimu.chat.util.Constants
@@ -47,8 +48,10 @@ class ChatActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_chat)
+        chatMessageDao = ServiceLocator.provideChatMessageDao()
 
-       // messageDao = (application as ChatApplication).daoSession!!.messageDao
+
+        // messageDao = (application as ChatApplication).daoSession!!.messageDao
 
         mListPreviousMessages = findViewById<View?>(R.id.listPreviousMessages) as ListView
         messageText = findViewById<View?>(R.id.message) as EditText

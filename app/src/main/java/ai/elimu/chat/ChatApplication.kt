@@ -3,6 +3,7 @@ package ai.elimu.chat
 import ai.elimu.chat.dao.DaoMaster
 import ai.elimu.chat.dao.DaoMaster.DevOpenHelper
 import ai.elimu.chat.dao.DaoSession
+import ai.elimu.chat.di.ServiceLocator
 import ai.elimu.chat.util.Constants
 import ai.elimu.chat.util.VersionHelper
 import android.app.Application
@@ -18,6 +19,7 @@ class ChatApplication : Application() {
     override fun onCreate() {
         Log.i(javaClass.getName(), "onCreate")
         super.onCreate()
+        ServiceLocator.initialize(this)
 
         val helper = DevOpenHelper(this, "chat-db")
         val db = helper.writableDb
