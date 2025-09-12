@@ -1,27 +1,35 @@
 [versions]
 elimuContentProvider = "1.4.51"
 agp = "8.6.0"
+javapoet = "1.13.0"
 junit = "4.13.2"
-greenDao = "3.3.0"
-greenDaoGradlePlugin = "3.3.1"
 circleImageView = "3.1.0"
 
 androidXJunit = "1.2.1"
 androidXEspresso = "3.7.0"
 coreKtx = "1.16.0"
+activityKtx="1.10.1"
 kotlin = "2.2.0"
+room = "2.7.2"
 
 [libraries]
 elimu-content-provider = { group = "ai.elimu", name = "content-provider", version.ref = "elimuContentProvider" }
-green-dao = { group = "org.greenrobot", name = "greendao", version.ref = "greenDao" }
-green-dao-gradle-plugin = { group = "org.greenrobot", name = "greendao-gradle-plugin", version.ref = "greenDaoGradlePlugin" }
 circle-imageview = { group = "de.hdodenhof", name = "circleimageview", version.ref = "circleImageView" }
 agp = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidXJunit" }
 androidx-espresso = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidXEspresso" }
 
+javapoet = { module = "com.squareup:javapoet", version.ref = "javapoet" }
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 
+androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "activityKtx" }
+
+
 [plugins]
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }

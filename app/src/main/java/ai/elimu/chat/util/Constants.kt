@@ -1,0 +1,102 @@
+package ai.elimu.chat.util
+
+object Constants {
+
+    const val PREF_FILE_NAME: String = "pref_app_001"
+
+    const val PREF_APP_VERSION_CODE: String = "pref_app_version_code"
+
+    const val PREF_STUDENT_ID: String = "pref_student_id"
+
+    const val PREF_STUDENT_AVATAR: String = "pref_student_avatar"
+
+    const val STUDENTID_AKILI = "00000000aaaaaaaa_1"
+
+    const val STUDENTID_PENGUIN = "00000000aaaaaaaa_2"
+
+    val EMOJI_UNICODES = intArrayOf(
+        // Emoticons
+        0x1F601,
+        0x1F602,
+        0x1F603,
+        0x1F604,
+        0x1F605,
+        0x1F606,
+        0x1F609,
+        0x1F60A,
+        0x1F60B,
+        0x1F60C,
+        0x1F60D,
+        0x1F60F,
+        0x1F612,
+        0x1F613,
+        0x1F614,
+        0x1F616,
+        0x1F618,
+        0x1F61A,
+        0x1F61C,
+        0x1F61D,
+        0x1F61E,
+        0x1F620,
+        0x1F621,
+        0x1F622,
+        0x1F623,
+        0x1F624,
+        0x1F625,
+        0x1F628,
+        0x1F629,
+        0x1F62A,
+        0x1F62B,
+        0x1F62D,
+        0x1F630,
+        0x1F631,
+        0x1F632,
+        0x1F633,
+        0x1F635,
+        0x1F637,
+        0x1F638,
+        0x1F639,
+        0x1F63A,
+        0x1F63B,
+        0x1F63C,
+        0x1F63D,
+        0x1F63E,
+        0x1F63F,
+        0x1F640,
+        0x1F645,
+        0x1F646,
+        0x1F647,
+        0x1F648,
+        0x1F649,
+        0x1F64A,
+        0x1F64B,
+        0x1F64C,
+        0x1F64D,
+        0x1F64E,
+        0x1F64F,  // Uncategorized
+
+        0x1F40C,
+        0x1F40D,
+        0x1F40E,
+        0x1F411,
+        0x1F412,
+        0x1F414,
+        0x1F418,
+        0x1F419,
+        0x1F41A,
+        0x1F41B,
+        0x1F41C,
+        0x1F41D,
+        0x1F41E,
+        0x1F41F,
+        0x1F420,
+        0x1F421,
+        0x1F422,
+        0x1F423,
+        0x1F424,
+        0x1F425,
+        0x1F426,
+        0x1F427,
+        0x1F428,
+    )
+}
