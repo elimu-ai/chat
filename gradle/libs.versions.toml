@@ -1,5 +1,5 @@
 [versions]
-elimuContentProvider = "1.4.51"
+elimuContentProvider = "1.4.53"
 agp = "8.6.0"
 junit = "4.13.2"
 greenDao = "3.3.0"
