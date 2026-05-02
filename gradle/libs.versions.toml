@@ -1,5 +1,5 @@
 [versions]
-elimuContentProvider = "1.4.74"
+elimuContentProvider = "1.4.75"
 agp = "8.9.1"
 junit = "4.13.2"
 greenDao = "3.3.0"
@@ -9,7 +9,7 @@ circleImageView = "3.1.0"
 androidXJunit = "1.2.1"
 androidXEspresso = "3.7.0"
 coreKtx = "1.16.0"
-kotlin = "2.3.0"
+kotlin = "2.2.0"
 
 [libraries]
 elimu-content-provider = { group = "ai.elimu", name = "content-provider", version.ref = "elimuContentProvider" }
