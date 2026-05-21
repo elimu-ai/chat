@@ -25,8 +25,8 @@ android {
         applicationId "ai.elimu.chat"
         minSdkVersion 29
         targetSdkVersion 36
-        versionCode 2001067
-        versionName "2.1.67"
+        versionCode 2001068
+        versionName "2.1.68-SNAPSHOT"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
